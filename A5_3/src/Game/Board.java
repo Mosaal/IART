@@ -9,16 +9,20 @@ public class Board {
 	private int[][] grid;
 	private final int width;
 	private final int height;
+	private final int[] exit;
 	private HashMap<Integer, Block> blocks;
 	
 	/**
 	 * Creates a Board instance
 	 * @param width width of the board, width >= 3
 	 * @param height height of the board, height >= 3
+	 * @param exitDir specifies the direction of the exit in regards to the board
+	 * @param exitRC specifies the row or column of the exit
 	 */
-	public Board(final int width, final int height) {
+	public Board(final int width, final int height, final int exitDir, final int exitRC) {
 		this.width = width;
 		this.height = height;
+		this.exit = new int[] { exitDir, exitRC };
 		
 		grid = new int[width][height];
 		blocks = new HashMap<Integer, Block>();
