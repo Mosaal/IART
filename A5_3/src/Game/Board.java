@@ -42,6 +42,9 @@ public class Board {
 	/** Returns the height of the board */
 	public final int getHeight() { return height; }
 	
+	/** Returns the array with the information about the exit */
+	public final int[] getExit() { return exit; }
+	
 	/** Returns the list of blocks on the board */
 	public HashMap<Integer, Block> getBlocks() { return blocks; }
 	
