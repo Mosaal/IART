@@ -29,33 +29,82 @@ public class Board {
 	}
 	
 	// Instance methods
+	/** Returns the grid of this board */
+	public int[][] getGrid() { return grid; }
+	
 	/** Returns the width of the board */
 	public final int getWidth() { return width; }
 	
 	/** Returns the height of the board */
 	public final int getHeight() { return height; }
 	
-	/** Returns the grid of this instance */
-	public int[][] getGrid() { return grid; }
-	
 	/** Returns the list of blocks on the board */
 	public HashMap<Integer, Block> getBlocks() { return blocks; }
 	
 	/**
-	 * Adds a new block to the board
-	 * @param block new block to be added to the board
+	 * Checks if the block is out of bounds of the board
+	 * @param newBlock new block to be added to the board
 	 */
-	public void addBlock(Block block) {
-		/**
-		 * TODO
-		 * Must check if ID is unique
-		 * Must check if position isn't taken
-		 * Then add it to the grid and the map
-		 */
+	public boolean isOutOfBounds(Block newBlock) {
+		if (newBlock.getRow() >= 0 && newBlock.getCol() >= 0) {
+			if (newBlock.getDirection() == Block.HOR) {
+				if (newBlock.getCol() + newBlock.getLength() > width)
+					return true;
+			} else {
+				if (newBlock.getRow() + newBlock.getLength() > height)
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
-	/** Returns the current state of the board */
-	public String toString() {
+	/**
+	 * Checks if the position of the new block is already taken on the board
+	 * @param newBlock new block to be added to the board
+	 */
+	public boolean isPositionTaken(Block newBlock) {
+		for (int i = 0; i < newBlock.getLength(); i++) {
+			if (newBlock.getDirection() == Block.HOR) {
+				if (grid[newBlock.getRow()][newBlock.getCol() + i] != 0)
+					return true;
+			} else {
+				if (grid[newBlock.getRow() + i][newBlock.getCol()] != 0)
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Adds a new block to the board
+	 * @param newBlock new block to be added to the board
+	 */
+	public boolean addBlock(Block newBlock) {
+		if (!blocks.containsKey(newBlock.getID())) {
+			if (!isOutOfBounds(newBlock)) {
+				if (!isPositionTaken(newBlock)) {
+					Block.lastID = newBlock.getID();
+					blocks.put(newBlock.getID(), newBlock);
+					
+					for (int i = 0; i < newBlock.getLength(); i++) {
+						if (newBlock.getDirection() == Block.HOR)
+							grid[newBlock.getRow()][newBlock.getCol() + i] = newBlock.getID();
+						else
+							grid[newBlock.getRow() + i][newBlock.getCol()] = newBlock.getID();
+					}
+					
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	/** Returns the current state of the board in a string */
+	public String toString(boolean bls) {
 		String str = "";
 		
 		for (int i = 0; i < height; i++) {
@@ -64,9 +113,11 @@ public class Board {
 			str += "\n";
 		}
 		
-		str += "\n";
-		for (Entry<Integer, Block> block: blocks.entrySet())
-			str += block.toString() + "\n\n";
+		if (bls) {
+			str += "\n";
+			for (Entry<Integer, Block> block: blocks.entrySet())
+				str += block.toString() + "\n\n";
+		}
 		
 		return str;
 	}
