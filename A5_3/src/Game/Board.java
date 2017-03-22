@@ -12,6 +12,12 @@ public class Board {
 	private final int[] exit;
 	private HashMap<Integer, Block> blocks;
 	
+	// Static variables
+	public static final int UP = 0;
+	public static final int DOWN = 1;
+	public static final int LEFT = 2;
+	public static final int RIGHT = 3;
+	
 	/**
 	 * Creates a Board instance
 	 * @param width width of the board, width >= 3
@@ -54,7 +60,7 @@ public class Board {
 	 */
 	public boolean isOutOfBounds(Block newBlock) {
 		if (newBlock.getRow() >= 0 && newBlock.getCol() >= 0) {
-			if (newBlock.getDirection() == Block.HOR) {
+			if (newBlock.getOrientation() == Block.HOR) {
 				if (newBlock.getCol() + newBlock.getLength() > width)
 					return true;
 			} else {
@@ -72,7 +78,7 @@ public class Board {
 	 */
 	public boolean isPositionTaken(Block newBlock) {
 		for (int i = 0; i < newBlock.getLength(); i++) {
-			if (newBlock.getDirection() == Block.HOR) {
+			if (newBlock.getOrientation() == Block.HOR) {
 				if (grid[newBlock.getRow()][newBlock.getCol() + i] != 0)
 					return true;
 			} else {
@@ -92,11 +98,10 @@ public class Board {
 		if (!blocks.containsKey(newBlock.getID())) {
 			if (!isOutOfBounds(newBlock)) {
 				if (!isPositionTaken(newBlock)) {
-					Block.lastID = newBlock.getID();
 					blocks.put(newBlock.getID(), newBlock);
 					
 					for (int i = 0; i < newBlock.getLength(); i++) {
-						if (newBlock.getDirection() == Block.HOR)
+						if (newBlock.getOrientation() == Block.HOR)
 							grid[newBlock.getRow()][newBlock.getCol() + i] = newBlock.getID();
 						else
 							grid[newBlock.getRow() + i][newBlock.getCol()] = newBlock.getID();
@@ -108,6 +113,68 @@ public class Board {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Checks if the specified block can be moved in a given direction
+	 * @param block block to be moved
+	 * @param direction direction the block is going to be moved to
+	 */
+	public boolean canBlockBeMoved(Block block, final int direction) {
+		// TODO
+		if (block.getOrientation() == Block.HOR) {
+			if (direction == LEFT && block.getCol() > 0) {
+				if (grid[block.getRow()][block.getCol() - 1] == 0)
+					return true;
+			} else if (direction == RIGHT && block.getCol() < width - 1) {
+				if (grid[block.getRow()][block.getCol() + 1] == 0)
+					return true;
+			}
+		} else {
+			if (direction == UP && block.getRow() > 0) {
+				if (grid[block.getRow() - 1][block.getCol()] == 0)
+					return true;
+			} else if (direction == DOWN && block.getRow() < height - 1) {
+				if (grid[block.getRow() + 1][block.getCol()] == 0)
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Moves the specified block in a given direction
+	 * @param block block to be moved
+	 * @param direction direction the block is going to be moved to
+	 */
+	public void moveBlock(Block block, final int direction) {
+		// TODO
+		if (canBlockBeMoved(block, direction)) {
+			System.out.println("YES");
+			switch (direction) {
+			case UP:
+				grid[block.getRow() - 1][block.getCol()] = block.getID();
+				grid[block.getRow() + block.getLength()][block.getCol()] = 0;
+				blocks.get(block.getID()).setPosition(block.getRow() - 1, block.getCol());
+				break;
+			case DOWN:
+				grid[block.getRow()][block.getCol()] = 0;
+				grid[block.getRow() + block.getLength()][block.getCol()] = block.getID();
+				blocks.get(block.getID()).setPosition(block.getRow() + 1, block.getCol());
+				break;
+			case LEFT:
+				grid[block.getRow()][block.getCol() - 1] = block.getID();
+				grid[block.getRow()][block.getCol() + block.getLength()] = 0;
+				blocks.get(block.getID()).setPosition(block.getRow(), block.getCol() - 1);
+				break;
+			case RIGHT:
+				grid[block.getRow()][block.getCol()] = 0;
+				grid[block.getRow()][block.getCol() + block.getLength()] = block.getID();
+				blocks.get(block.getID()).setPosition(block.getRow(), block.getCol() + 1);
+				break;
+			}
+		}
 	}
 	
 	/** Returns the current state of the board in a string */

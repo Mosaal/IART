@@ -5,12 +5,11 @@ public class Block {
 	// Instance variables
 	private int row;
 	private int col;
-	private final int length;
-	private final int direction;
 	private final int ID;
+	private final int length;
+	private final int orientation;
 	
 	// Static variables
-	public static int lastID = 0;
 	public static final int HOR = 0;
 	public static final int VER = 1;
 	
@@ -22,12 +21,12 @@ public class Block {
 	 * @param length length of the block, length > 1
 	 * @param direction specifies whether the block is horizontal (0) or vertical (1)
 	 */
-	public Block(final int ID, final int row, final int col, final int length, final int direction) {
+	public Block(final int ID, final int row, final int col, final int length, final int orientation) {
+		this.ID = ID;
 		this.row = row;
 		this.col = col;
-		this.ID = (ID != 0) ? ID : lastID++;
-		this.length = (length > 1) ? length : 2;
-		this.direction = (direction == HOR || direction == VER) ? direction : HOR;
+		this.length = length;
+		this.orientation = orientation;
 	}
 
 	// Instance methods
@@ -38,7 +37,7 @@ public class Block {
 	public final int getLength() { return length; }
 	
 	/** Returns the direction of the block */
-	public final int getDirection() { return direction; }
+	public final int getOrientation() { return orientation; }
 	
 	/** Returns the row of the top left corner of the block */
 	public int getRow() { return row; }
@@ -61,8 +60,8 @@ public class Block {
 		String str = "Block #" + ID;
 		
 		str += "\nRow: " + row + ", Col: " + col;
-		str += "\nLength: " + length + "\nDirection: ";
-		str += (direction == HOR) ? "horizontal" : "vertical";
+		str += "\nLength: " + length + "\nOrientation: ";
+		str += (orientation == HOR) ? "horizontal" : "vertical";
 		
 		return str;
 	}
