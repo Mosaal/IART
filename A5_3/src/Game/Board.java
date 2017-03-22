@@ -25,10 +25,10 @@ public class Board {
 	 * @param exitDir specifies the direction of the exit in regards to the board
 	 * @param exitRC specifies the row or column of the exit
 	 */
-	public Board(final int width, final int height, final int exitDir, final int exitRC) {
+	public Board(final int width, final int height, final int exitRC, final int exitDir) {
 		this.width = width;
 		this.height = height;
-		this.exit = new int[] { exitDir, exitRC };
+		this.exit = new int[] { exitRC, exitDir };
 		
 		grid = new int[width][height];
 		blocks = new HashMap<Integer, Block>();
@@ -55,10 +55,16 @@ public class Board {
 	public HashMap<Integer, Block> getBlocks() { return blocks; }
 	
 	/**
+	 * Returns the block with the specified ID
+	 * @param ID ID of the block to be returned
+	 */
+	public Block getBlockByID(final int ID) { return blocks.containsKey(ID) ? blocks.get(ID) : null; }
+	
+	/**
 	 * Checks if the block is out of bounds of the board
 	 * @param newBlock new block to be added to the board
 	 */
-	public boolean isOutOfBounds(Block newBlock) {
+	private boolean isOutOfBounds(Block newBlock) {
 		if (newBlock.getRow() >= 0 && newBlock.getCol() >= 0) {
 			if (newBlock.getOrientation() == Block.HOR) {
 				if (newBlock.getCol() + newBlock.getLength() > width)
@@ -76,7 +82,7 @@ public class Board {
 	 * Checks if the position of the new block is already taken on the board
 	 * @param newBlock new block to be added to the board
 	 */
-	public boolean isPositionTaken(Block newBlock) {
+	private boolean isPositionTaken(Block newBlock) {
 		for (int i = 0; i < newBlock.getLength(); i++) {
 			if (newBlock.getOrientation() == Block.HOR) {
 				if (grid[newBlock.getRow()][newBlock.getCol() + i] != 0)
@@ -120,22 +126,21 @@ public class Board {
 	 * @param block block to be moved
 	 * @param direction direction the block is going to be moved to
 	 */
-	public boolean canBlockBeMoved(Block block, final int direction) {
-		// TODO
+	private boolean canBlockBeMoved(Block block, final int direction) {
 		if (block.getOrientation() == Block.HOR) {
 			if (direction == LEFT && block.getCol() > 0) {
 				if (grid[block.getRow()][block.getCol() - 1] == 0)
 					return true;
-			} else if (direction == RIGHT && block.getCol() < width - 1) {
-				if (grid[block.getRow()][block.getCol() + 1] == 0)
+			} else if (direction == RIGHT && block.getCol() + block.getLength() < width) {
+				if (grid[block.getRow()][block.getCol() + block.getLength()] == 0)
 					return true;
 			}
 		} else {
 			if (direction == UP && block.getRow() > 0) {
 				if (grid[block.getRow() - 1][block.getCol()] == 0)
 					return true;
-			} else if (direction == DOWN && block.getRow() < height - 1) {
-				if (grid[block.getRow() + 1][block.getCol()] == 0)
+			} else if (direction == DOWN && block.getRow() + block.getLength() < height) {
+				if (grid[block.getRow() + block.getLength()][block.getCol()] == 0)
 					return true;
 			}
 		}
@@ -148,14 +153,12 @@ public class Board {
 	 * @param block block to be moved
 	 * @param direction direction the block is going to be moved to
 	 */
-	public void moveBlock(Block block, final int direction) {
-		// TODO
+	public boolean moveBlock(Block block, final int direction) {
 		if (canBlockBeMoved(block, direction)) {
-			System.out.println("YES");
 			switch (direction) {
 			case UP:
 				grid[block.getRow() - 1][block.getCol()] = block.getID();
-				grid[block.getRow() + block.getLength()][block.getCol()] = 0;
+				grid[block.getRow() + block.getLength() - 1][block.getCol()] = 0;
 				blocks.get(block.getID()).setPosition(block.getRow() - 1, block.getCol());
 				break;
 			case DOWN:
@@ -165,7 +168,7 @@ public class Board {
 				break;
 			case LEFT:
 				grid[block.getRow()][block.getCol() - 1] = block.getID();
-				grid[block.getRow()][block.getCol() + block.getLength()] = 0;
+				grid[block.getRow()][block.getCol() + block.getLength() - 1] = 0;
 				blocks.get(block.getID()).setPosition(block.getRow(), block.getCol() - 1);
 				break;
 			case RIGHT:
@@ -174,7 +177,11 @@ public class Board {
 				blocks.get(block.getID()).setPosition(block.getRow(), block.getCol() + 1);
 				break;
 			}
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	/** Returns the current state of the board in a string */
