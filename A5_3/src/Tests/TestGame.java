@@ -2,10 +2,13 @@ package Tests;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import Game.Block;
 import Game.Board;
+import Logic.Utils;
 
 public class TestGame {
 
@@ -75,5 +78,15 @@ public class TestGame {
 		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.DOWN));
 		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.LEFT));
 		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.RIGHT));
+	}
+	
+	/** Tests the loading of a level */
+	@Test
+	public void testLevelLoading() {
+		try {
+			assertNotEquals(null, Utils.loadLevel(1));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

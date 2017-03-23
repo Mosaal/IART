@@ -61,7 +61,7 @@ public class Block {
 		
 		str += "\nRow: " + row + ", Col: " + col;
 		str += "\nLength: " + length + "\nOrientation: ";
-		str += (orientation == HOR) ? "horizontal" : "vertical";
+		str += (orientation == HOR) ? "Horizontal" : "Vertical";
 		
 		return str;
 	}
