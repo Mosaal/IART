@@ -9,6 +9,7 @@ import Game.Board;
 
 public class TestGame {
 
+	/** Tests the creation of the board and its components */
 	@Test
 	public void testBlockCreation() {
 		Block block = new Block(1, 0, 0, 3, Block.HOR);
@@ -20,19 +21,24 @@ public class TestGame {
 		assertEquals(Block.HOR, block.getOrientation());
 	}
 	
+	/** Tests the creation of the block and its components */
 	@Test
 	public void testBoardCreation() {
-		Board board = new Board(10, 10, 3, Board.RIGHT);
+		Board board = new Board(10, 10);
 		
 		assertEquals(10, board.getWidth());
 		assertEquals(10, board.getHeight());
-		assertEquals(3, board.getExit()[0]);
-		assertEquals(Board.RIGHT, board.getExit()[1]);
+		assertEquals(true, board.getBlocks().isEmpty());
+		
+		for (int i = 0; i < board.getHeight(); i++)
+			for (int j = 0; j < board.getWidth(); j++)
+				assertEquals(0, board.getGrid()[i][j]);
 	}
 	
+	/** Tests the placement of the blocks on the board */
 	@Test
 	public void testBlockPlacement() {
-		Board board = new Board(6, 6, 3, Board.RIGHT);
+		Board board = new Board(6, 6);
 		
 		assertEquals(true, board.addBlock(new Block(1, 0, 0, 3, Block.HOR)));
 		assertEquals(false, board.addBlock(new Block(1, 0, 0, 3, Block.HOR)));
@@ -40,31 +46,34 @@ public class TestGame {
 		assertEquals(false, board.addBlock(new Block(3, 2, 0, 3, Block.VER)));
 	}
 	
+	/** Tests the movement of the blocks on the board */
 	@Test
 	public void testBlockMovement() {
-		Board board = new Board(6, 6, Board.RIGHT, 2);
+		Board board = new Board(6, 6);
 		
 		board.addBlock(new Block(1, 0, 0, 3, Block.HOR));
 		board.addBlock(new Block(2, 1, 0, 2, Block.VER));
+		board.addBlock(new Block(3, 5, 3, 3, Block.HOR));
+		board.addBlock(new Block(4, 3, 5, 2, Block.VER));
 		
-		assertEquals(true, board.moveBlock(board.getBlockByID(1), Board.RIGHT));
-		assertEquals(true, board.moveBlock(board.getBlockByID(1), Board.RIGHT));
-		assertEquals(true, board.moveBlock(board.getBlockByID(1), Board.RIGHT));
-		assertEquals(false, board.moveBlock(board.getBlockByID(1), Board.RIGHT));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(1), Board.UP));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(1), Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(1), Board.LEFT));
+		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(1), Board.RIGHT));
 		
-		assertEquals(true, board.moveBlock(board.getBlockByID(1), Board.LEFT));
-		assertEquals(true, board.moveBlock(board.getBlockByID(1), Board.LEFT));
-		assertEquals(true, board.moveBlock(board.getBlockByID(1), Board.LEFT));
-		assertEquals(false, board.moveBlock(board.getBlockByID(1), Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(2), Board.UP));
+		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(2), Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(2), Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(2), Board.RIGHT));
 		
-		assertEquals(true, board.moveBlock(board.getBlockByID(2), Board.DOWN));
-		assertEquals(true, board.moveBlock(board.getBlockByID(2), Board.DOWN));
-		assertEquals(true, board.moveBlock(board.getBlockByID(2), Board.DOWN));
-		assertEquals(false, board.moveBlock(board.getBlockByID(2), Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(3), Board.UP));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(3), Board.DOWN));
+		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(3), Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(3), Board.RIGHT));
 		
-		assertEquals(true, board.moveBlock(board.getBlockByID(2), Board.UP));
-		assertEquals(true, board.moveBlock(board.getBlockByID(2), Board.UP));
-		assertEquals(true, board.moveBlock(board.getBlockByID(2), Board.UP));
-		assertEquals(false, board.moveBlock(board.getBlockByID(2), Board.UP));
+		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(4), Board.UP));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.RIGHT));
 	}
 }
