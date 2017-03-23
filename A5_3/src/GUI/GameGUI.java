@@ -125,10 +125,6 @@ public class GameGUI extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		new GameGUI();
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start Game")) {
@@ -139,5 +135,9 @@ public class GameGUI extends JFrame implements ActionListener {
 			setResizable(true);
 			revalidate();
 		}
+	}
+	
+	public static void main(String[] args) {
+		new GameGUI();
 	}
 }
