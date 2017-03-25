@@ -173,6 +173,16 @@ public class Board {
 			break;
 		}
 	}
+	
+	/** Checks if the game is over */
+	public boolean isGameOver() {
+		Block mainBlock = blocks.get(1);
+		
+		if (mainBlock.getRow() == EXIT_ROW && mainBlock.getCol() + mainBlock.getLength() == width)
+			return true;
+		
+		return false;
+	}
 
 	/** Returns the current state of the board in a string */
 	public String toString(boolean bls) {
@@ -191,16 +201,5 @@ public class Board {
 		}
 
 		return str;
-	}
-	
-	public boolean wingame(){
-		boolean b = false;
-		for (Entry<Integer, Block> block: blocks.entrySet()){
-			if((block.getValue().getRow()== EXIT_ROW) && (block.getValue().getCol() == this.width)){
-				b = true;
-			}
-			break;
-		}
-		return b;
 	}
 }

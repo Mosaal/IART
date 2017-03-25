@@ -23,7 +23,7 @@ public class Algorithms {
 						to_visit.add(1,to_visit.get(aux));	
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -34,7 +34,7 @@ public class Algorithms {
 						to_visit.add(1,to_visit.get(aux));	
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -45,7 +45,7 @@ public class Algorithms {
 						to_visit.add(1,to_visit.get(aux));
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -56,7 +56,7 @@ public class Algorithms {
 						to_visit.add(1,to_visit.get(aux));	
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -74,8 +74,8 @@ public class Algorithms {
 	}
 	
 	
-	// Neste caso, o jogo apenas tem em conta o número de jogadas minimas a serem feitas, ou seja a profundidade na árvore
-	// Por isso neste caso, o algoritmo a* é na verdade uma pesquisa em largura
+	// Neste caso, o jogo apenas tem em conta o nï¿½mero de jogadas minimas a serem feitas, ou seja a profundidade na ï¿½rvore
+	// Por isso neste caso, o algoritmo a* ï¿½ na verdade uma pesquisa em largura
 	public static Move[] AStar(Board board) {
 		//Move[] moves = null;
 		List<Board> to_visit = new ArrayList<Board>();
@@ -91,7 +91,7 @@ public class Algorithms {
 						to_visit.add(to_visit.get(aux));
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -102,7 +102,7 @@ public class Algorithms {
 						to_visit.add(to_visit.get(aux));
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -113,7 +113,7 @@ public class Algorithms {
 						to_visit.add(to_visit.get(aux));
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
@@ -124,7 +124,7 @@ public class Algorithms {
 						to_visit.add(to_visit.get(aux));
 						visited.add(to_visit.get(aux));
 						//adicionar ao moves
-						if(to_visit.get(aux).wingame()){
+						if(to_visit.get(aux).isGameOver()){
 							//return moves;
 						}
 					}
