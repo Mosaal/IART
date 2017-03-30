@@ -8,7 +8,7 @@ import Game.*;
 
 public class Algorithms {
 
-	public static List<Move> DFS(Board board) {
+	/*public static List<Move> DFS(Board board) {
 
 		List<Board> to_visit = new ArrayList<Board>(); //lista de tabuleiros que irá guardar todos os tabuleiros a visitar
 		List<Board> visited = new ArrayList<Board>(); //lista de tabuleiros que já estiveram ou estão na lista "to_visit"
@@ -115,8 +115,7 @@ public class Algorithms {
 			}
 		}		
 		return null;
-	}
-	
+	}*/
 	
 	// Neste caso, a euristica que está a ser aplicada é a seguinte: 
 	//À distância do jogador à meta, soma-se 1 por cada carro que se encontre no seu caminho

@@ -1,33 +1,37 @@
 package GUI;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-
 import java.awt.Component;
 import java.awt.Dimension;
-
-import javax.swing.border.EmptyBorder;
-
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.io.IOException;
+
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
-public class GameGUI extends JFrame implements ActionListener {
+import Game.Board;
+import Logic.Utils;
+
+public class GameGUI extends JFrame {
 
 	private static final long serialVersionUID = -8277252937409034080L;
 
 	// Instance variables
-	private static Canvas canvas;
-	private static JButton startBtn;
-	private static JRadioButton aiMode, userMode;
-	private static JRadioButton astarBtn, bfsBtn, dfsBtn;
+	private Canvas canvas;
+	private JButton startBtn;
+	private JComboBox<String> comboBox;
+	private JRadioButton aiMode, userMode;
+	private JRadioButton astarBtn, bfsBtn, dfsBtn;
 	
 	/** Creates the main window of the game */
 	public GameGUI() {
@@ -36,7 +40,7 @@ public class GameGUI extends JFrame implements ActionListener {
 		JPanel mainPanel = new JPanel();
 		
 		setContentPane(mainPanel);
-		mainPanel.setPreferredSize(new Dimension(280, 200));
+		mainPanel.setPreferredSize(new Dimension(300, 200));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		JLabel nameLabel = new JLabel("Rush Hour");
@@ -46,15 +50,35 @@ public class GameGUI extends JFrame implements ActionListener {
 		mainPanel.add(nameLabel);
 		
 		JPanel btnPanel = new JPanel();
-		btnPanel.setBorder(new EmptyBorder(5, 10, 10, 10));
+		btnPanel.setBorder(new EmptyBorder(5, 10, 5, 10));
 		mainPanel.add(btnPanel);
-		btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
+		btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.Y_AXIS));
 		
 		startBtn = new JButton("Start Game");
-		btnPanel.add(startBtn);
-		startBtn.addActionListener(this);
 		startBtn.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		startBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		startBtn.setFocusPainted(false);
+		startBtn.addActionListener(e -> {
+			Board board = null;
+			try { board = Utils.loadLevel(comboBox.getSelectedIndex() + 1); }
+			catch (IOException e1) { e1.printStackTrace(); }
+			
+			if (board != null) {
+				canvas = new Canvas(board);
+				setContentPane(canvas);
+				setResizable(true);
+				revalidate();
+			} else {
+				JOptionPane.showMessageDialog(this, "The level's file has invalid information!", "Error!", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		btnPanel.add(startBtn);
+		
+		comboBox = new JComboBox<String>(Utils.searchLevels());
+		comboBox.setFont(new Font("Monospaced", Font.PLAIN, 13));
+		((JLabel) comboBox.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		comboBox.setSelectedIndex(0);
+		btnPanel.add(comboBox);
 		
 		JPanel radioPanel = new JPanel();
 		mainPanel.add(radioPanel);
@@ -72,9 +96,10 @@ public class GameGUI extends JFrame implements ActionListener {
 		modePanel.add(modeLabel);
 		
 		aiMode = new JRadioButton("AI Mode");
-		aiMode.setSelected(true);
+		aiMode.setBorder(new EmptyBorder(0, 0, 10, 0));
 		aiMode.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		aiMode.setAlignmentX(Component.CENTER_ALIGNMENT);
+		aiMode.setSelected(true);
 		modePanel.add(aiMode);
 		
 		userMode = new JRadioButton("User Mode");
@@ -99,12 +124,14 @@ public class GameGUI extends JFrame implements ActionListener {
 		algPanel.add(algLabel);
 		
 		astarBtn = new JRadioButton("A*");
-		astarBtn.setSelected(true);
+		astarBtn.setBorder(new EmptyBorder(0, 0, 10, 0));
 		astarBtn.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		astarBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		astarBtn.setSelected(true);
 		algPanel.add(astarBtn);
 		
 		bfsBtn = new JRadioButton("BFS");
+		bfsBtn.setBorder(new EmptyBorder(0, 0, 10, 0));
 		bfsBtn.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		bfsBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		algPanel.add(bfsBtn);
@@ -119,25 +146,19 @@ public class GameGUI extends JFrame implements ActionListener {
 		algGrp.add(bfsBtn);
 		algGrp.add(dfsBtn);
 		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int centerX = (int) screenSize.getWidth() / 2;
+		int centerY = (int) screenSize.getHeight() / 2;
+		
 		pack();
 		setResizable(false);
-		setMinimumSize(new Dimension(280, 280));
+		setMinimumSize(new Dimension(300, 300));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
 		setVisible(true);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Start Game")) {
-			canvas = new Canvas();
-			canvas.add(new JLabel("The game started..."));
-			
-			setContentPane(canvas);
-			setResizable(true);
-			revalidate();
-		}
-	}
-	
+	/** Main function */
 	public static void main(String[] args) {
 		new GameGUI();
 	}

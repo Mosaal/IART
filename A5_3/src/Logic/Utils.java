@@ -16,6 +16,22 @@ public class Utils {
 	private static int orientation;
 	private static int length;
 	
+	/** Searches for the levels on their directory and loads them to the combo box */
+	public static String[] searchLevels() {
+		String[] levelNames = null;
+		File dir = new File("res/levels");
+		
+		if (dir.exists() && dir.isDirectory()) {
+			File[] levels = dir.listFiles();
+			levelNames = new String[levels.length];
+			
+			for (int i = 0; i < levels.length; i++)
+				levelNames[i] = "Level #" + (i + 1);
+		}
+		
+		return levelNames;
+	}
+	
 	/**
 	 * Checks whether the arguments of the text file are valid or not
 	 * @param width width of the board
@@ -23,11 +39,15 @@ public class Utils {
 	 * @param block string array with information about a block
 	 */
 	private static boolean validArgs(final int width, final int height, final int exitRow, final String[] block) {
-		ID = Integer.parseInt(block[0]);
-		row = Integer.parseInt(block[1]);
-		col = Integer.parseInt(block[2]);
-		orientation = Integer.parseInt(block[3]);
-		length = Integer.parseInt(block[4]);
+		try {
+			ID = Integer.parseInt(block[0]);
+			row = Integer.parseInt(block[1]);
+			col = Integer.parseInt(block[2]);
+			orientation = Integer.parseInt(block[3]);
+			length = Integer.parseInt(block[4]);
+		} catch (NumberFormatException e) {
+			return false;
+		}
 		
 		if (ID == 1 && row != exitRow)
 			return false;
