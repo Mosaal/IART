@@ -24,7 +24,7 @@ public class GameGUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -8277252937409034080L;
 
 	// Instance variables
-	private static JPanel gamePanel;
+	private static Canvas canvas;
 	private static JButton startBtn;
 	private static JRadioButton aiMode, userMode;
 	private static JRadioButton astarBtn, bfsBtn, dfsBtn;
@@ -129,10 +129,10 @@ public class GameGUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start Game")) {
-			gamePanel = new JPanel();
-			gamePanel.add(new JLabel("The game started..."));
+			canvas = new Canvas();
+			canvas.add(new JLabel("The game started..."));
 			
-			setContentPane(gamePanel);
+			setContentPane(canvas);
 			setResizable(true);
 			revalidate();
 		}

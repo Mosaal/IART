@@ -9,6 +9,7 @@ public class Board {
 	private int[][] grid;
 	private final int width;
 	private final int height;
+	private final int exitRow;
 	private HashMap<Integer, Block> blocks;
 
 	// Static variables
@@ -16,7 +17,6 @@ public class Board {
 	public static final int DOWN = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
-	public static final int EXIT_ROW = 2;
 
 	/**
 	 * Creates a Board instance
@@ -25,9 +25,10 @@ public class Board {
 	 * @param exitDir specifies the direction of the exit in regards to the board
 	 * @param exitRC specifies the row or column of the exit
 	 */
-	public Board(final int width, final int height) {
+	public Board(final int width, final int height, final int exitRow) {
 		this.width = width;
 		this.height = height;
+		this.exitRow = exitRow;
 
 		grid = new int[width][height];
 		blocks = new HashMap<Integer, Block>();
@@ -46,6 +47,9 @@ public class Board {
 
 	/** Returns the height of the board */
 	public final int getHeight() { return height; }
+	
+	/** Returns the row of the Exit */
+	public final int getExitRow() { return exitRow; }
 
 	/** Returns the list of blocks on the board */
 	public HashMap<Integer, Block> getBlocks() { return blocks; }
@@ -178,7 +182,7 @@ public class Board {
 	public boolean isGameOver() {
 		Block mainBlock = blocks.get(1);
 		
-		if (mainBlock.getRow() == EXIT_ROW && mainBlock.getCol() + mainBlock.getLength() == width)
+		if (mainBlock.getRow() == exitRow && mainBlock.getCol() + mainBlock.getLength() == width)
 			return true;
 		
 		return false;

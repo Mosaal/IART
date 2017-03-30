@@ -22,12 +22,15 @@ public class Utils {
 	 * @param height height of the board
 	 * @param block string array with information about a block
 	 */
-	private static boolean validArgs(final int width, final int height, String[] block) {
+	private static boolean validArgs(final int width, final int height, final int exitRow, final String[] block) {
 		ID = Integer.parseInt(block[0]);
 		row = Integer.parseInt(block[1]);
 		col = Integer.parseInt(block[2]);
 		orientation = Integer.parseInt(block[3]);
 		length = Integer.parseInt(block[4]);
+		
+		if (ID == 1 && row != exitRow)
+			return false;
 		
 		if (ID > 0 && length > 0) {
 			if (row >= 0 && col >= 0) {
@@ -63,6 +66,7 @@ public class Utils {
 		// Parse and validate size of the board
 		int width = Integer.parseInt(dimension[0]);
 		int height = Integer.parseInt(dimension[1]);
+		int exitRow = Integer.parseInt(dimension[2]);
 		
 		if (width <= 0 || height <= 0) {
 			br.close();
@@ -73,7 +77,7 @@ public class Utils {
 		int i = 0;
 		Block[] blocks = new Block[numBlocks];
 		while ((line = br.readLine()) != null) {
-			if (validArgs(width, height, line.split(":"))) {
+			if (validArgs(width, height, exitRow, line.split(":"))) {
 				blocks[i++] = new Block(ID, row, col, length, orientation);
 			} else {
 				br.close();
@@ -82,7 +86,7 @@ public class Utils {
 		}
 		
 		// Create board and blocks
-		Board board = new Board(width, height);
+		Board board = new Board(width, height, exitRow);
 		for (int b = 0; b < numBlocks; b++) {
 			if (!board.addBlock(blocks[b])) {
 				br.close();

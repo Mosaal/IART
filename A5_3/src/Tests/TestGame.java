@@ -27,10 +27,11 @@ public class TestGame {
 	/** Tests the creation of the block and its components */
 	@Test
 	public void testBoardCreation() {
-		Board board = new Board(10, 10);
+		Board board = new Board(10, 10, 2);
 		
 		assertEquals(10, board.getWidth());
 		assertEquals(10, board.getHeight());
+		assertEquals(2, board.getExitRow());
 		assertEquals(true, board.getBlocks().isEmpty());
 		
 		for (int i = 0; i < board.getHeight(); i++)
@@ -41,7 +42,7 @@ public class TestGame {
 	/** Tests the placement of the blocks on the board */
 	@Test
 	public void testBlockPlacement() {
-		Board board = new Board(6, 6);
+		Board board = new Board(6, 6, 2);
 		
 		assertEquals(true, board.addBlock(new Block(1, 0, 0, 3, Block.HOR)));
 		assertEquals(false, board.addBlock(new Block(1, 0, 0, 3, Block.HOR)));
@@ -52,7 +53,7 @@ public class TestGame {
 	/** Tests the movement of the blocks on the board */
 	@Test
 	public void testBlockMovement() {
-		Board board = new Board(6, 6);
+		Board board = new Board(6, 6, 2);
 		
 		board.addBlock(new Block(1, 0, 0, 3, Block.HOR));
 		board.addBlock(new Block(2, 1, 0, 2, Block.VER));
