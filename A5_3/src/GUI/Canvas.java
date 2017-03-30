@@ -11,6 +11,8 @@ public class Canvas extends JPanel {
 	// Instance variables
 	private int[][] grid;
 	
+	public Canvas() {}
+	
 	public Canvas(int[][] grid) {
 		this.grid = grid;
 	}

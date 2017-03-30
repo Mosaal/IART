@@ -84,10 +84,14 @@ public class TestGame {
 	/** Tests the loading of a level */
 	@Test
 	public void testLevelLoading() {
-		try {
-			assertNotEquals(null, Utils.loadLevel(1));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		try { assertNotEquals(null, Utils.loadLevel(1)); }
+		catch (IOException e) { e.printStackTrace(); }
+	}
+	
+	/** Tests the DFS algorithm */
+	@Test
+	public void testDFS() throws IOException {
+		Board board = Utils.loadLevel(1);
+		System.out.println(board.toString(false));
 	}
 }
