@@ -8,132 +8,119 @@ import Game.*;
 
 public class Algorithms {
 
-	public static Move[] DFS(Board board) {
-		//Move[] moves = null;
-		List<Board> to_visit = new ArrayList<Board>();
-		List<Board> visited = new ArrayList<Board>();
-		to_visit.add(board);
+	public static List<Move> DFS(Board board) {
+
+		List<Board> to_visit = new ArrayList<Board>(); //lista de tabuleiros que irá guardar todos os tabuleiros a visitar
+		List<Board> visited = new ArrayList<Board>(); //lista de tabuleiros que já estiveram ou estão na lista "to_visit"
+
+		//Variaveis Move que serão utilizadas para guardar as várias sequências possíveis de movimentos 
+		List<List<Move>> move_matrix = new ArrayList<List<Move>>();
+		List<Move> move_list_aux = new ArrayList<Move>();
+		Move move_aux = null;
+
 		visited.add(board);
 		int aux = 0;
+		Board board_aux = new Board(board.getWidth(), board.getHeight()); //Board auxiliar incializado com valores iguais ao board utilizado
 		while(!to_visit.isEmpty()) {
-			for (Entry<Integer, Block> block: to_visit.get(aux).getBlocks().entrySet()) {
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 0)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 0);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(1,to_visit.get(aux));	
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 1)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 1);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(1,to_visit.get(aux));	
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 2)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 2);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(1,to_visit.get(aux));
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 3)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 3);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(1,to_visit.get(aux));	
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}	
-				to_visit.remove(0);
-				aux++;
+			board_aux = to_visit.get(aux);
+			//Verifica se o tabuleiro atual é solução do algoritmo
+			if(board_aux.isGameOver()){
+				return move_matrix.get(aux);
 			}
-			aux=0;
+			else {
+				for (Entry<Integer, Block> block: board_aux.getBlocks().entrySet()) {  //Percorre todos os blocos do estado de tabuleiro
+					for (int i = 0; i <= 3; i++) { //Testa todas as direções para o "block" em questão
+						//0 - Cima, 1 - Baixo, 2 - Esquerda, 3 - Direita
+						if(board_aux.canBlockBeMoved(block.getValue(), i)) {
+							board_aux.moveBlock(block_aux.getValue(), i);
+							if(!visited.contains(board_aux)) { //verifica se o novo estado de tabuleiro não foi vericado anteriormente
+								to_visit.add(1,board_aux);	//adiciona no início da lista
+								visited.add(board_aux);
+
+								//adicionar ao moves
+
+								move_aux = new Move(block.getId(),i);
+								//Se a matriz estiver vazia, acrescenta apenas uma lista com o movimento atual
+								if(move_matrix.isEmpty()){
+									move_list_aux.add(move_aux);
+									move_matrix.add(move_list_aux);
+								}
+								//Se não, vai buscar a lista com os movimentos utilizados e acrescenta-lhe o movimento atual
+								else{
+									move_list_aux = move_matrix.get(aux);
+									move_list_aux.add(move_aux);
+									move_matrix.add(move_list_aux);
+								}
+							}
+							board_aux = to_visit.get(aux); //Dá-se reset ao board_aux para este ser utilizado para os restantes movimentos possiveis do "block"
+						}
+						aux++;
+					}		
+				}
+				aux=0;
+			}
 		}		
 		return null;
 	}
 	
-	public static Move[] BFS(Board board) {
+	public static List<Move> BFS(Board board) {
+		List<Board> to_visit = new ArrayList<Board>(); //lista de tabuleiros que irá guardar todos os tabuleiros a visitar
+		List<Board> visited = new ArrayList<Board>(); //lista de tabuleiros que já estiveram ou estão na lista "to_visit"
+
+		//Variaveis Move que serão utilizadas para guardar as várias sequências possíveis de movimentos 
+		List<List<Move>> move_matrix = new ArrayList<List<Move>>();
+		List<Move> move_list_aux = new ArrayList<Move>();
+		Move move_aux = null;
+
+		visited.add(board);
+		int aux = 0;
+		Board board_aux = new Board(board.getWidth(), board.getHeight()); //Board auxiliar incializado com valores iguais ao board utilizado
+		while(!to_visit.isEmpty()) {
+			board_aux = to_visit.get(aux);
+			//Verifica se o tabuleiro atual é solução do algoritmo
+			if(board_aux.isGameOver()){
+				return move_matrix.get(aux);
+			}
+			else {
+				for (Entry<Integer, Block> block: board_aux.getBlocks().entrySet()) {  //Percorre todos os blocos do estado de tabuleiro
+					for (int i = 0; i <= 3; i++) { //Testa todas as direções para o "block" em questão
+						//0 - Cima, 1 - Baixo, 2 - Esquerda, 3 - Direita
+						if(board_aux.canBlockBeMoved(block.getValue(), i)) {
+							board_aux.moveBlock(block_aux.getValue(), i);
+							if(!visited.contains(board_aux)) { //verifica se o novo estado de tabuleiro não foi vericado anteriormente
+								to_visit.add(board_aux); //adiciona no final da lista	
+								visited.add(board_aux);
+
+								//adicionar ao moves
+
+								move_aux = new Move(block.getId(),i);
+								//Se a matriz estiver vazia, acrescenta apenas uma lista com o movimento atual
+								if(move_matrix.isEmpty()){
+									move_list_aux.add(move_aux);
+									move_matrix.add(move_list_aux);
+								}
+								//Se não, vai buscar a lista com os movimentos utilizados e acrescenta-lhe o movimento atual
+								else{
+									move_list_aux = move_matrix.get(aux);
+									move_list_aux.add(move_aux);
+									move_matrix.add(move_list_aux);
+								}
+							}
+							board_aux = to_visit.get(aux); //Dá-se reset ao board_aux para este ser utilizado para os restantes movimentos possiveis do "block"
+						}
+						aux++;
+					}		
+				}
+				aux=0;
+			}
+		}		
 		return null;
 	}
 	
 	
-	// Neste caso, o jogo apenas tem em conta o n�mero de jogadas minimas a serem feitas, ou seja a profundidade na �rvore
-	// Por isso neste caso, o algoritmo a* � na verdade uma pesquisa em largura
-	public static Move[] AStar(Board board) {
-		//Move[] moves = null;
-		List<Board> to_visit = new ArrayList<Board>();
-		List<Board> visited = new ArrayList<Board>();
-		to_visit.add(board);
-		visited.add(board);
-		int aux = 0;
-		while(!to_visit.isEmpty()) {
-			for (Entry<Integer, Block> block: to_visit.get(aux).getBlocks().entrySet()) {
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 0)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 0);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(to_visit.get(aux));
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 1)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 1);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(to_visit.get(aux));
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 2)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 2);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(to_visit.get(aux));
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}
-				if(to_visit.get(aux).canBlockBeMoved(block.getValue(), 3)) {
-					to_visit.get(aux).moveBlock(block.getValue(), 3);
-					if(!visited.contains(to_visit.get(aux))){
-						to_visit.add(to_visit.get(aux));
-						visited.add(to_visit.get(aux));
-						//adicionar ao moves
-						if(to_visit.get(aux).isGameOver()){
-							//return moves;
-						}
-					}
-				}	
-				to_visit.remove(0);
-				aux++;
-			}
-			aux=0;
-		}		
+	// Neste caso, a euristica que está a ser aplicada é a seguinte: 
+	//À distância do jogador à meta, soma-se 1 por cada carro que se encontre no seu caminho
+	public static List<Move> AStar(Board board) {
 		return null;
 	}
 }
