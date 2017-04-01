@@ -91,7 +91,7 @@ public class TestGame {
 	/** Tests the DFS algorithm */
 	@Test
 	public void testDFS() throws IOException {
-		Board board = Utils.loadLevel(1);
-		System.out.println(board.toString(false));
+		Board board = Utils.loadLevel(2);
+		System.out.print(board.toString(false));
 	}
 }

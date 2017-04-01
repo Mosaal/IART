@@ -110,7 +110,7 @@ public class Utils {
 		for (int b = 0; b < numBlocks; b++) {
 			if (!board.addBlock(blocks[b])) {
 				br.close();
-				return board;
+				return null;
 			}
 		}
 		

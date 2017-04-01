@@ -17,6 +17,7 @@ public class Board {
 	public static final int DOWN = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
+	public static final int MAIN_BLOCK_ID = 1;
 
 	/**
 	 * Creates a Board instance
@@ -180,7 +181,7 @@ public class Board {
 	
 	/** Checks if the game is over */
 	public boolean isGameOver() {
-		Block mainBlock = blocks.get(1);
+		Block mainBlock = blocks.get(MAIN_BLOCK_ID);
 		
 		if (mainBlock.getRow() == exitRow && mainBlock.getCol() + mainBlock.getLength() == width)
 			return true;
@@ -193,15 +194,21 @@ public class Board {
 		String str = "";
 
 		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++)
-				str += grid[i][j] + " ";
+			for (int j = 0; j < width; j++) {
+				if (grid[i][j] == 0)
+					str += "__" + " ";
+				else if (grid[i][j] < 10)
+					str += "0" + grid[i][j] + " ";
+				else
+					str += grid[i][j] + " ";
+			}
 			str += "\n";
 		}
 
 		if (bls) {
 			str += "\n";
 			for (Entry<Integer, Block> block: blocks.entrySet())
-				str += block.toString() + "\n\n";
+				str += block.getValue().toString() + "\n\n";
 		}
 
 		return str;
