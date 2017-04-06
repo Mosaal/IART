@@ -5,11 +5,13 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import Game.Block;
 import Game.Board;
 
 public class Canvas extends JPanel {
 
 	private static final long serialVersionUID = 1407057593083296463L;
+	private Block tmp_block;
 
 	// Instance vaiables
 	private Board board;
@@ -31,14 +33,18 @@ public class Canvas extends JPanel {
 		int[][] grid = board.getGrid();
 		int ySize = this.getHeight() / board.getHeight();
 		int xSize = this.getWidth() / board.getWidth();
-		
+	
 		for (int y = 0; y < board.getHeight(); y++) {
 			for (int x = 0; x < board.getWidth(); x++) {
 				if (grid[y][x] == 0) {
-					g.setColor(new Color(128, 128, 128));
+					g.setColor(new Color(250, 250, 250));
 					g.fillRect(x * xSize, y * ySize, xSize, ySize);
 				} else if (grid[y][x] == 1) {
-					g.setColor(new Color(255, 0, 0));
+					g.setColor(new Color(30, 30, 30));
+					g.fillRect(x * xSize, y * ySize, xSize, ySize);
+				}
+				else {
+					g.setColor(board.getBlocks().get(grid[y][x]).getColor());
 					g.fillRect(x * xSize, y * ySize, xSize, ySize);
 				}
 			}
