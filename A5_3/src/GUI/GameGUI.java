@@ -65,8 +65,16 @@ public class GameGUI extends JFrame {
 			
 			if (board != null) {
 				canvas = new Canvas(board);
+				
 				setContentPane(canvas);
 				setResizable(true);
+				setSize(448, 454);
+				
+				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+				int centerX = (int) screenSize.getWidth() / 2;
+				int centerY = (int) screenSize.getHeight() / 2;
+				
+				setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
 				revalidate();
 			} else {
 				JOptionPane.showMessageDialog(this, "The level's file has invalid information!", "Error!", JOptionPane.ERROR_MESSAGE);
