@@ -55,6 +55,9 @@ public class Board {
 
 	/** Returns the list of blocks on the board */
 	public HashMap<Integer, Block> getBlocks() { return blocks; }
+	
+	/** Returns the number of blocks on the board */
+	public int getNumOfBlocks() { return blocks.size(); }
 
 	/**
 	 * Returns the block with the specified ID
