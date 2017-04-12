@@ -117,8 +117,6 @@ public class Algorithms {
 		return null;
 	}*/
 	
-	// Neste caso, a euristica que está a ser aplicada é a seguinte: 
-	//À distância do jogador à meta, soma-se 1 por cada carro que se encontre no seu caminho
 	public static List<Move> AStar(Board board) {
 		return null;
 	}
