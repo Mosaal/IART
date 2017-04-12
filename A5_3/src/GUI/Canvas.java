@@ -3,10 +3,12 @@ package GUI;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
+import Game.Block;
 import Game.Board;
 
 public class Canvas extends JPanel {
@@ -15,8 +17,10 @@ public class Canvas extends JPanel {
 
 	// Instance vaiables
 	private Board board;
-	private final int BORDER_OFFSET = 2;
 	private HashMap<Integer, Color> colors;
+	
+	private final int OFFSET = 4;
+	private final int ARC_WIDTH = 25;
 	
 	/**
 	 * Creates a Canvas instance
@@ -32,7 +36,7 @@ public class Canvas extends JPanel {
 		colors.put(1, new Color(255, 0, 0));
 		
 		// Create as many colors as necessary
-		for (int i = 2; i < board.getNumOfBlocks(); i++) {
+		for (int i = 2; i < board.getNumOfBlocks() + 2; i++) {
 			// Randomize a color
 			int r = (int) (new Random().nextDouble() * 255.0);
 			int g = (int) (new Random().nextDouble() * 255.0);
@@ -44,8 +48,6 @@ public class Canvas extends JPanel {
 			else
 				i--;
 		}
-		
-		System.out.println(colors.toString());
 	}
 	
 	// Instance methods
@@ -60,34 +62,42 @@ public class Canvas extends JPanel {
 		int[][] grid = board.getGrid();
 		
 		// Set the square size
-		int ySize = getHeight() / (board.getHeight() + BORDER_OFFSET);
-		int xSize = getWidth() / (board.getWidth() + BORDER_OFFSET);
+		int xSize = getWidth() / (board.getWidth() + 2);
+		int ySize = getHeight() / (board.getHeight() + 2);
 		
-		// Draw the border
-		for (int y = 0; y < board.getHeight() + BORDER_OFFSET; y++) {
-			for (int x = 0; x < board.getWidth() + BORDER_OFFSET; x++) {
-				// Set the color
-				if (y == board.getExitRow() + 1 && x == (grid.length + BORDER_OFFSET) - 1)
-					g.setColor(colors.get(0));
-				else
-					g.setColor(new Color(0, 0, 0));
-				
-				// Check if it belongs to the border
-				if (y == 0 || y == (grid.length + BORDER_OFFSET) - 1)
-					g.fillRect(x * xSize, y * ySize, xSize, ySize);
-				if (x == 0 || x == (grid.length + BORDER_OFFSET) - 1)
-					g.fillRect(x * xSize, y * ySize, xSize, ySize);
-			}
-		}
+		// Paint the background black
+		g.setColor(new Color(0, 0, 0));
+		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		// Draw the grid
-		for (int y = 0; y < board.getHeight(); y++) {
-			for (int x = 0; x < board.getWidth(); x++) {
-				// Set the color
-				g.setColor(colors.get(grid[y][x]));
-				
-				// Draw the square
-				g.fillRect((x * xSize) + xSize, (y * ySize) + ySize, xSize, ySize);
+		// Paint the ground and exit grey
+		int exitCol = grid.length + 1;
+		int exitRow = board.getExitRow() + 1;
+		int groundWidth = board.getWidth() * xSize;
+		int groundHeight = board.getHeight() * ySize;
+		
+		g.setColor(new Color(128, 128, 128));
+		g.fillRect(xSize, ySize, groundWidth, groundHeight);
+		g.fillRect(exitCol * xSize, exitRow * ySize, xSize, ySize);
+		
+		// Paint the blocks
+		for (Entry<Integer, Block> block: board.getBlocks().entrySet()) {
+			int blockID = block.getValue().getID();
+			int blockCol = block.getValue().getCol();
+			int blockRow = block.getValue().getRow();
+			int blockLength = block.getValue().getLength();
+			
+			// Set color and paint block according to orientation
+			g.setColor(colors.get(blockID));
+			if (block.getValue().getOrientation() == Block.HOR) {
+				g.fillRoundRect(((blockCol * xSize) + xSize) + (OFFSET / 2),
+								((blockRow * ySize) + ySize) + (OFFSET / 2),
+								(xSize * blockLength) - OFFSET, ySize - OFFSET,
+								ARC_WIDTH, ARC_WIDTH);
+			} else {
+				g.fillRoundRect(((blockCol * xSize) + xSize) + (OFFSET / 2),
+								((blockRow * ySize) + ySize) + (OFFSET / 2),
+								xSize - OFFSET, (ySize * blockLength) - OFFSET,
+								ARC_WIDTH, ARC_WIDTH);
 			}
 		}
 	}
