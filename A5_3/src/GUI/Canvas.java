@@ -1,14 +1,15 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import Game.Block;
 import Game.Board;
 
 public class Canvas extends JPanel {
@@ -17,31 +18,43 @@ public class Canvas extends JPanel {
 
 	// Instance vaiables
 	private Board board;
+	private JButton[][] buttons;
+	private boolean waitingForClick;
 	private HashMap<Integer, Color> colors;
-	
-	private final int OFFSET = 4;
-	private final int ARC_WIDTH = 25;
-	
+
 	/**
 	 * Creates a Canvas instance
 	 * @param board the board to be set on the canvas
 	 */
 	public Canvas(Board board) {
 		this.board = board;
+		waitingForClick = false;
 		colors = new HashMap<Integer, Color>();
+		buttons = new JButton[board.getHeight() + 2][board.getWidth() + 2];
 		
+		// TODO
+		// Add labels to keep track of the status of the game
+		
+		// Prepare the canvas
+		generateColors();
+		setCanvasSettings();
+		handleInput();
+	}
+
+	/** Generates random colors for each of the blocks on the board */
+	private void generateColors() {
 		// Set the predefined colors
 		colors.put(-1, new Color(0, 0, 0));
 		colors.put(0, new Color(128, 128, 128));
 		colors.put(1, new Color(255, 0, 0));
-		
+
 		// Create as many colors as necessary
 		for (int i = 2; i < board.getNumOfBlocks() + 2; i++) {
 			// Randomize a color
 			int r = (int) (new Random().nextDouble() * 255.0);
 			int g = (int) (new Random().nextDouble() * 255.0);
 			int b = (int) (new Random().nextDouble() * 255.0);
-			
+
 			// Put it in the map if it is new
 			if (!colors.containsValue(new Color(r, g, b)))
 				colors.put(i, new Color(r, g, b));
@@ -49,55 +62,65 @@ public class Canvas extends JPanel {
 				i--;
 		}
 	}
-	
-	// Instance methods
-	/** Returns this instance's board */
-	public Board getBoard() { return board; }
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+
+	/** Sets the panel's settings */
+	private void setCanvasSettings() {
+		// Set the layout
+		setLayout(new GridLayout(board.getHeight() + 2, board.getWidth() + 2));
 		
-		// Get the grid
+		// Set the buttons
+		for (int i = 0; i < board.getHeight() + 2; i++) {
+			for (int j = 0; j < board.getWidth() + 2; j++) {
+				JButton button = new JButton();
+				button.setActionCommand(i + ":" + j);
+				
+				// Paint the whole button
+				button.setOpaque(true);
+				button.setBorderPainted(false);
+				
+				// Check if it is the border
+				if (i == board.getExitRow() + 1 && j == board.getWidth() + 1)
+					button.setBackground(colors.get(0));
+				else if (i == 0 || i == board.getHeight() + 1 || j == 0 || j == board.getWidth() + 1)
+					button.setBackground(colors.get(-1));
+				else if (i > 0 && i <= board.getHeight() && j > 0 && j <= board.getWidth())
+					button.setBackground(colors.get(board.getGrid()[i - 1][j - 1]));
+				
+				add(button);
+				buttons[i][j] = button;
+			}
+		}
+	}
+	
+	/** Handles the input from the user */
+	private void handleInput() {
 		int[][] grid = board.getGrid();
 		
-		// Set the square size
-		int xSize = getWidth() / (board.getWidth() + 2);
-		int ySize = getHeight() / (board.getHeight() + 2);
-		
-		// Paint the background black
-		g.setColor(new Color(0, 0, 0));
-		g.fillRect(0, 0, getWidth(), getHeight());
-		
-		// Paint the ground and exit grey
-		int exitCol = grid.length + 1;
-		int exitRow = board.getExitRow() + 1;
-		int groundWidth = board.getWidth() * xSize;
-		int groundHeight = board.getHeight() * ySize;
-		
-		g.setColor(new Color(128, 128, 128));
-		g.fillRect(xSize, ySize, groundWidth, groundHeight);
-		g.fillRect(exitCol * xSize, exitRow * ySize, xSize, ySize);
-		
-		// Paint the blocks
-		for (Entry<Integer, Block> block: board.getBlocks().entrySet()) {
-			int blockID = block.getValue().getID();
-			int blockCol = block.getValue().getCol();
-			int blockRow = block.getValue().getRow();
-			int blockLength = block.getValue().getLength();
-			
-			// Set color and paint block according to orientation
-			g.setColor(colors.get(blockID));
-			if (block.getValue().getOrientation() == Block.HOR) {
-				g.fillRoundRect(((blockCol * xSize) + xSize) + (OFFSET / 2),
-								((blockRow * ySize) + ySize) + (OFFSET / 2),
-								(xSize * blockLength) - OFFSET, ySize - OFFSET,
-								ARC_WIDTH, ARC_WIDTH);
-			} else {
-				g.fillRoundRect(((blockCol * xSize) + xSize) + (OFFSET / 2),
-								((blockRow * ySize) + ySize) + (OFFSET / 2),
-								xSize - OFFSET, (ySize * blockLength) - OFFSET,
-								ARC_WIDTH, ARC_WIDTH);
+		for (int i = 0; i < buttons.length; i++) {
+			for (int j = 0; j < buttons[i].length; j++) {
+				buttons[i][j].addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						int row = Integer.parseInt(e.getActionCommand().split(":")[0]);
+						int col = Integer.parseInt(e.getActionCommand().split(":")[1]);
+						
+						// Check if it is not the border
+						if (row > 0 && row <= board.getHeight() && col > 0 && col <= board.getWidth()) {
+							int blockID = grid[row - 1][col - 1];
+							
+							// TODO
+							// Figure out which block got clicked
+							// Check if it is a new click or it is waiting to be clicked
+							// Depending on the situation see if the block can be moved
+							
+							// Check what has been clicked
+							if (blockID == 0)
+								System.out.println("Ground");
+							else
+								System.out.println("BlockID: " + blockID);
+						}
+					}
+				});
 			}
 		}
 	}
