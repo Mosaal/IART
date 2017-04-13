@@ -60,25 +60,25 @@ public class TestGame {
 		board.addBlock(new Block(3, 5, 3, 3, Block.HOR));
 		board.addBlock(new Block(4, 3, 5, 2, Block.VER));
 		
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(1), Board.UP));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(1), Board.DOWN));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(1), Board.LEFT));
-		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(1), Board.RIGHT));
+		assertEquals(false, board.canBlockBeMoved(1, Board.UP));
+		assertEquals(false, board.canBlockBeMoved(1, Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(1, Board.LEFT));
+		assertEquals(true, board.canBlockBeMoved(1, Board.RIGHT));
 		
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(2), Board.UP));
-		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(2), Board.DOWN));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(2), Board.LEFT));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(2), Board.RIGHT));
+		assertEquals(false, board.canBlockBeMoved(2, Board.UP));
+		assertEquals(true, board.canBlockBeMoved(2, Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(2, Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(2, Board.RIGHT));
 		
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(3), Board.UP));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(3), Board.DOWN));
-		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(3), Board.LEFT));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(3), Board.RIGHT));
+		assertEquals(false, board.canBlockBeMoved(3, Board.UP));
+		assertEquals(false, board.canBlockBeMoved(3, Board.DOWN));
+		assertEquals(true, board.canBlockBeMoved(3, Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(3, Board.RIGHT));
 		
-		assertEquals(true, board.canBlockBeMoved(board.getBlockByID(4), Board.UP));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.DOWN));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.LEFT));
-		assertEquals(false, board.canBlockBeMoved(board.getBlockByID(4), Board.RIGHT));
+		assertEquals(true, board.canBlockBeMoved(4, Board.UP));
+		assertEquals(false, board.canBlockBeMoved(4, Board.DOWN));
+		assertEquals(false, board.canBlockBeMoved(4, Board.LEFT));
+		assertEquals(false, board.canBlockBeMoved(4, Board.RIGHT));
 	}
 	
 	/** Tests the loading of a level */
@@ -92,6 +92,6 @@ public class TestGame {
 	@Test
 	public void testDFS() throws IOException {
 		Board board = Utils.loadLevel(2);
-		System.out.print(board.toString(false));
+		System.out.print(board.toString());
 	}
 }

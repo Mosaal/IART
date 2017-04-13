@@ -130,7 +130,9 @@ public class Board {
 	 * @param block block to be moved
 	 * @param direction direction the block is going to be moved to
 	 */
-	public boolean canBlockBeMoved(Block block, final int direction) {
+	public boolean canBlockBeMoved(final int blockID, final int direction) {
+		Block block = blocks.get(blockID);
+		
 		if (block.getOrientation() == Block.HOR) {
 			if (direction == LEFT && block.getCol() > 0) {
 				if (grid[block.getRow()][block.getCol() - 1] == 0)
@@ -157,7 +159,9 @@ public class Board {
 	 * @param block block to be moved
 	 * @param direction direction the block is going to be moved to
 	 */
-	public void moveBlock(Block block, final int direction) {
+	public void moveBlock(final int blockID, final int direction) {
+		Block block = blocks.get(blockID);
+		
 		switch (direction) {
 		case UP:
 			grid[block.getRow() - 1][block.getCol()] = block.getID();
@@ -193,7 +197,7 @@ public class Board {
 	}
 
 	/** Returns the current state of the board in a string */
-	public String toString(boolean bls) {
+	public String toString() {
 		String str = "";
 
 		for (int i = 0; i < height; i++) {
@@ -208,11 +212,9 @@ public class Board {
 			str += "\n";
 		}
 
-		if (bls) {
-			str += "\n";
-			for (Entry<Integer, Block> block: blocks.entrySet())
-				str += block.getValue().toString() + "\n\n";
-		}
+		str += "\n";
+		for (Entry<Integer, Block> block: blocks.entrySet())
+			str += block.getValue().toString() + "\n\n";
 
 		return str;
 	}

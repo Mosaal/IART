@@ -1,126 +1,121 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import Game.Block;
 import Game.Board;
 
 public class Canvas extends JPanel {
 
 	private static final long serialVersionUID = 1407057593083296463L;
 
-	// Instance vaiables
+	// Instance variables
 	private Board board;
-	private JButton[][] buttons;
-	private boolean waitingForClick;
+	private GameFrame root;
+	private Tile[][] selectGrid;
 	private HashMap<Integer, Color> colors;
-
+	
+	private final int OFFSET = 4;
+	private final int ARC_WIDTH = 25;
+	
 	/**
 	 * Creates a Canvas instance
-	 * @param board the board to be set on the canvas
+	 * @param board the board to be displayed on the screen
 	 */
-	public Canvas(Board board) {
+	public Canvas(Board board, GameFrame root) {
+		this.root = root;
 		this.board = board;
-		waitingForClick = false;
 		colors = new HashMap<Integer, Color>();
-		buttons = new JButton[board.getHeight() + 2][board.getWidth() + 2];
 		
-		// TODO
-		// Add labels to keep track of the status of the game
+		// Initialize selection grid
+		selectGrid = new Tile[board.getHeight() + 2][board.getWidth() + 2];
+		for (int i = 0; i < selectGrid.length; i++)
+			for (int j = 0; j < selectGrid[i].length; j++)
+				selectGrid[i][j] = new Tile(j, i, getWidth() / board.getWidth(), getHeight() / board.getHeight());
 		
-		// Prepare the canvas
-		generateColors();
-		setCanvasSettings();
-		handleInput();
-	}
-
-	/** Generates random colors for each of the blocks on the board */
-	private void generateColors() {
 		// Set the predefined colors
-		colors.put(-1, new Color(0, 0, 0));
-		colors.put(0, new Color(128, 128, 128));
-		colors.put(1, new Color(255, 0, 0));
-
-		// Create as many colors as necessary
-		for (int i = 2; i < board.getNumOfBlocks() + 2; i++) {
-			// Randomize a color
+		colors.put(0, Color.GRAY);
+		colors.put(1, Color.RED);
+		
+		// Initialize the colors
+		for (int i = 2; i < board.getNumOfBlocks() + 1; i++) {
+			// Generate a random color
 			int r = (int) (new Random().nextDouble() * 255.0);
 			int g = (int) (new Random().nextDouble() * 255.0);
 			int b = (int) (new Random().nextDouble() * 255.0);
-
-			// Put it in the map if it is new
-			if (!colors.containsValue(new Color(r, g, b)))
-				colors.put(i, new Color(r, g, b));
-			else
-				i--;
+			
+			// Store it if it is new
+			Color color = new Color(r, g, b);
+			if (!colors.containsValue(color) && !color.equals(Color.BLACK)) colors.put(i, color);
+			else i--;
 		}
-	}
-
-	/** Sets the panel's settings */
-	private void setCanvasSettings() {
-		// Set the layout
-		setLayout(new GridLayout(board.getHeight() + 2, board.getWidth() + 2));
 		
-		// Set the buttons
-		for (int i = 0; i < board.getHeight() + 2; i++) {
-			for (int j = 0; j < board.getWidth() + 2; j++) {
-				JButton button = new JButton();
-				button.setActionCommand(i + ":" + j);
-				
-				// Paint the whole button
-				button.setOpaque(true);
-				button.setBorderPainted(false);
-				
-				// Check if it is the border
-				if (i == board.getExitRow() + 1 && j == board.getWidth() + 1)
-					button.setBackground(colors.get(0));
-				else if (i == 0 || i == board.getHeight() + 1 || j == 0 || j == board.getWidth() + 1)
-					button.setBackground(colors.get(-1));
-				else if (i > 0 && i <= board.getHeight() && j > 0 && j <= board.getWidth())
-					button.setBackground(colors.get(board.getGrid()[i - 1][j - 1]));
-				
-				add(button);
-				buttons[i][j] = button;
-			}
-		}
+		// Handle user's input
+		handleInput();
 	}
 	
-	/** Handles the input from the user */
+	/** Handles the user's mouse input */
 	private void handleInput() {
-		int[][] grid = board.getGrid();
+		addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO
+				// Handle input
+				
+				// Update the whole screen
+				root.revalidate();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+		});
+	}
+	
+	// Instance methods
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		
-		for (int i = 0; i < buttons.length; i++) {
-			for (int j = 0; j < buttons[i].length; j++) {
-				buttons[i][j].addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						int row = Integer.parseInt(e.getActionCommand().split(":")[0]);
-						int col = Integer.parseInt(e.getActionCommand().split(":")[1]);
-						
-						// Check if it is not the border
-						if (row > 0 && row <= board.getHeight() && col > 0 && col <= board.getWidth()) {
-							int blockID = grid[row - 1][col - 1];
-							
-							// TODO
-							// Figure out which block got clicked
-							// Check if it is a new click or it is waiting to be clicked
-							// Depending on the situation see if the block can be moved
-							
-							// Check what has been clicked
-							if (blockID == 0)
-								System.out.println("Ground");
-							else
-								System.out.println("BlockID: " + blockID);
-						}
-					}
-				});
+		// Set the cell size
+		int xSize = getWidth() / board.getWidth();
+		int ySize = getHeight() / board.getHeight();
+		
+		// Paint the background gray
+		g.setColor(Color.GRAY);
+		g.fillRect(0, 0, getWidth(), getHeight());
+		
+		// Paint the border
+		// TODO
+		
+		// Paint the board
+		for (Entry<Integer, Block> temp: board.getBlocks().entrySet()) {
+			Block block = temp.getValue();
+			
+			// Set color and paint block
+			g.setColor(colors.get(block.getID()));
+			if (block.getOrientation() == Block.HOR) {
+				g.fillRoundRect((block.getCol() * xSize) + (OFFSET / 2),
+								(block.getRow() * ySize) + (OFFSET / 2),
+								(xSize * block.getLength()) - OFFSET, ySize - OFFSET,
+								ARC_WIDTH, ARC_WIDTH);
+			} else {
+				g.fillRoundRect((block.getCol() * xSize) + (OFFSET / 2),
+								(block.getRow() * ySize) + (OFFSET / 2),
+								xSize - OFFSET, (ySize * block.getLength()) - OFFSET,
+								ARC_WIDTH, ARC_WIDTH);
 			}
 		}
 	}

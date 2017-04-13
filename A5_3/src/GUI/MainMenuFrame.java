@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.BoxLayout;
@@ -22,23 +23,21 @@ import javax.swing.border.EmptyBorder;
 import Game.Board;
 import Logic.Utils;
 
-public class GameGUI extends JFrame {
+public class MainMenuFrame extends JFrame {
 
-	private static final long serialVersionUID = -8277252937409034080L;
+	private static final long serialVersionUID = 4395259959062206799L;
 
 	// Instance variables
-	private Canvas canvas;
 	private JButton startBtn;
 	private JComboBox<String> comboBox;
 	private JRadioButton aiMode, userMode;
 	private JRadioButton astarBtn, bfsBtn, dfsBtn;
-	
-	/** Creates the main window of the game */
-	public GameGUI() {
+
+	/** Creates a MainMenuFrame instance */
+	public MainMenuFrame() {
 		super("Rush Hour");
-		
+
 		JPanel mainPanel = new JPanel();
-		
 		setContentPane(mainPanel);
 		mainPanel.setPreferredSize(new Dimension(300, 200));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -64,18 +63,8 @@ public class GameGUI extends JFrame {
 			catch (IOException e1) { e1.printStackTrace(); }
 			
 			if (board != null) {
-				canvas = new Canvas(board);
-				
-				setContentPane(canvas);
-				setResizable(true);
-				setSize(448, 454);
-				
-				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-				int centerX = (int) screenSize.getWidth() / 2;
-				int centerY = (int) screenSize.getHeight() / 2;
-				
-				setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
-				revalidate();
+				new GameFrame(board);
+				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			} else {
 				JOptionPane.showMessageDialog(this, "The level's file has invalid information!", "Error!", JOptionPane.ERROR_MESSAGE);
 			}
@@ -165,9 +154,8 @@ public class GameGUI extends JFrame {
 		setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
 		setVisible(true);
 	}
-	
-	/** Main function */
+
 	public static void main(String[] args) {
-		new GameGUI();
+		new MainMenuFrame();
 	}
 }
