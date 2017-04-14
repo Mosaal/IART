@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-// import java.awt.event.WindowEvent;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
-// import javax.swing.JOptionPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Game.Block;
@@ -34,11 +34,12 @@ public class Canvas extends JPanel {
 	private final int BORDER = 2;
 	private final int OFFSET = 4;
 	private final int ARC_WIDTH = 25;
-	// private final String[] options = new String[] { "Quit", "Main Menu" };
+	private final String[] options = new String[] { "Quit", "Main Menu" };
 
 	/**
 	 * Creates a Canvas instance
 	 * @param board the board to be displayed on the screen
+	 * @param root the parent frame of this panel
 	 */
 	public Canvas(Board board, GameFrame root) {
 		this.root = root;
@@ -55,7 +56,14 @@ public class Canvas extends JPanel {
 		// Ready the canvas
 		updateSelectionGrid();
 		generateColors();
-		handleInput();
+		
+		// Ignore input if the chosen mode is AI
+		if (root.getMode() == 1) {
+			handleInput();
+		} else {
+			// TODO
+			// Run algorithm for the board
+		}
 	}
 
 	/** Updates the grid used to detect user input */
@@ -137,20 +145,16 @@ public class Canvas extends JPanel {
 										
 										// Check if the game is over
 										if (board.isGameOver()) {
-//											int n = JOptionPane.showOptionDialog(root, "Total Moves: " + validMoves, "Game Over!",
-//													 JOptionPane.YES_NO_CANCEL_OPTION,
-//													 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-//											
-//											if (n == 0) {
-//												root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
-//											} else {
-//												// Get rid of this frame
-//												root.setVisible(false);
-//												root.dispose();
-//												
-//												// Go back to the main menu
-//												new MainMenuFrame();
-//											}
+											int n = JOptionPane.showOptionDialog(root, "Total Moves: " + validMoves, "Game Over!",
+													 JOptionPane.YES_NO_CANCEL_OPTION,
+													 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+											
+											if (n == 0) {
+												System.exit(0);
+											} else {
+												new MainMenuFrame();
+												root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
+											}
 										}
 									}
 								} else {

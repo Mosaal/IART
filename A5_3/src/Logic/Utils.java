@@ -19,7 +19,7 @@ public class Utils {
 	/** Searches for the levels on their directory and loads them to the combo box */
 	public static String[] searchLevels() {
 		String[] levelNames = null;
-		File dir = new File("res/levels");
+		File dir = new File("res");
 		
 		if (dir.exists() && dir.isDirectory()) {
 			File[] levels = dir.listFiles();
@@ -73,7 +73,7 @@ public class Utils {
 	 * @throws IOException
 	 */
 	public static Board loadLevel(final int level) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File("res/levels/Level" + level + ".txt")));
+		BufferedReader br = new BufferedReader(new FileReader(new File("res/Level" + level + ".txt")));
 		
 		// Read first line
 		String line = br.readLine();

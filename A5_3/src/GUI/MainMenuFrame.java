@@ -63,7 +63,24 @@ public class MainMenuFrame extends JFrame {
 			catch (IOException e1) { e1.printStackTrace(); }
 			
 			if (board != null) {
-				new GameFrame(board);
+				// Check chosen mode
+				int mode = 0;
+				if (aiMode.isSelected())
+					mode = 0;
+				else if (userMode.isSelected())
+					mode = 1;
+				
+				// Check algorithm
+				int alg = 0;
+				if (astarBtn.isSelected())
+					alg = 0;
+				else if (bfsBtn.isSelected())
+					alg = 1;
+				else if (dfsBtn.isSelected())
+					alg = 2;
+				
+				// Switch to the game's frame
+				new GameFrame(board, mode, alg);
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			} else {
 				JOptionPane.showMessageDialog(this, "The level's file has invalid information!", "Error!", JOptionPane.ERROR_MESSAGE);

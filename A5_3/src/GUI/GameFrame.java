@@ -19,6 +19,8 @@ public class GameFrame extends JFrame {
 	private static final long serialVersionUID = 7856046888785438219L;
 
 	// Instance variables
+	private int alg;
+	private int mode;
 	private Canvas canvas;
 	private JLabel movesLabel;
 	
@@ -26,8 +28,11 @@ public class GameFrame extends JFrame {
 	 * Creates a GameFrame instance
 	 * @param board the board to be displayed on the screen
 	 */
-	public GameFrame(Board board) {
+	public GameFrame(Board board, int mode, int alg) {
 		super("Rush Hour");
+		
+		this.alg = alg;
+		this.mode = mode;
 		
 		canvas = new Canvas(board, this);
 		
@@ -59,4 +64,10 @@ public class GameFrame extends JFrame {
 	 * @param moves amount of moves to be set on the label
 	 */
 	public void setMovesLabel(int moves) { movesLabel.setText("Moves: " + moves); }
+	
+	/** Returns the chosen algorithm */
+	public int getAlg() { return alg; }
+	
+	/** Returns the chosen game mode */
+	public int getMode() { return mode; }
 }
