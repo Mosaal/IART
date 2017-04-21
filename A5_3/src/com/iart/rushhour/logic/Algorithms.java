@@ -1,10 +1,10 @@
-package Logic;
+package com.iart.rushhour.logic;
 
 // import java.util.ArrayList;
 import java.util.List;
 // import java.util.Map.Entry;
 
-import Game.*;
+import com.iart.rushhour.game.*;
 
 public class Algorithms {
 

@@ -1,4 +1,4 @@
-package GUI;
+package com.iart.rushhour.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -20,8 +20,8 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import Game.Board;
-import Logic.Utils;
+import com.iart.rushhour.game.Board;
+import com.iart.rushhour.logic.Utils;
 
 public class MainMenuFrame extends JFrame {
 

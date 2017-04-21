@@ -1,12 +1,12 @@
-package Logic;
+package com.iart.rushhour.logic;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import Game.Block;
-import Game.Board;
+import com.iart.rushhour.game.Block;
+import com.iart.rushhour.game.Board;
 
 public class Utils {
 	

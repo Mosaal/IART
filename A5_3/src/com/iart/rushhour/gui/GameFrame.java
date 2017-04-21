@@ -1,4 +1,4 @@
-package GUI;
+package com.iart.rushhour.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Game.Board;
-import Logic.Utils;
+import com.iart.rushhour.game.Board;
+import com.iart.rushhour.logic.Utils;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

@@ -1,4 +1,4 @@
-package GUI;
+package com.iart.rushhour.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,8 +12,8 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Game.Block;
-import Game.Board;
+import com.iart.rushhour.game.Block;
+import com.iart.rushhour.game.Board;
 
 public class Canvas extends JPanel {
 

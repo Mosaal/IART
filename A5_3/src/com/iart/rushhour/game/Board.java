@@ -1,4 +1,4 @@
-package Game;
+package com.iart.rushhour.game;
 
 import java.util.Map.Entry;
 import java.util.HashMap;

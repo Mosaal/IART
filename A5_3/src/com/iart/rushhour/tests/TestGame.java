@@ -1,4 +1,4 @@
-package Tests;
+package com.iart.rushhour.tests;
 
 import static org.junit.Assert.*;
 
@@ -6,9 +6,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import Game.Block;
-import Game.Board;
-import Logic.Utils;
+import com.iart.rushhour.game.Block;
+import com.iart.rushhour.game.Board;
+import com.iart.rushhour.logic.Utils;
 
 public class TestGame {
 

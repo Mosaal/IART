@@ -1,4 +1,4 @@
-package Game;
+package com.iart.rushhour.game;
 
 public class Block {
 
