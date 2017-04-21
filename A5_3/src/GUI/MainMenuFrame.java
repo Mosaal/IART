@@ -58,8 +58,10 @@ public class MainMenuFrame extends JFrame {
 		startBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		startBtn.setFocusPainted(false);
 		startBtn.addActionListener(e -> {
+			int lvl = comboBox.getSelectedIndex() + 1;
+			
 			Board board = null;
-			try { board = Utils.loadLevel(comboBox.getSelectedIndex() + 1); }
+			try { board = Utils.loadLevel(lvl); }
 			catch (IOException e1) { e1.printStackTrace(); }
 			
 			if (board != null) {
@@ -80,7 +82,7 @@ public class MainMenuFrame extends JFrame {
 					alg = 2;
 				
 				// Switch to the game's frame
-				new GameFrame(board, mode, alg);
+				new GameFrame(board, mode, alg, lvl);
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			} else {
 				JOptionPane.showMessageDialog(this, "The level's file has invalid information!", "Error!", JOptionPane.ERROR_MESSAGE);

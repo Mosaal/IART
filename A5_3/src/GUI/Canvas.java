@@ -2,8 +2,8 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -25,7 +25,7 @@ public class Canvas extends JPanel {
 	private int lastClick;
 	private int validMoves;
 	private boolean waitingForClick;
-	
+
 	private Board board;
 	private GameFrame root;
 	private Tile[][] selectGrid;
@@ -44,7 +44,7 @@ public class Canvas extends JPanel {
 	public Canvas(Board board, GameFrame root) {
 		this.root = root;
 		this.board = board;
-		
+
 		validMoves = 0;
 		waitingForClick = false;
 		colors = new HashMap<Integer, Color>();
@@ -52,11 +52,11 @@ public class Canvas extends JPanel {
 		// Set the initial square size
 		xSize = getWidth() / (board.getWidth() + 2);
 		ySize = getHeight() / (board.getHeight() + 2);
-		
+
 		// Ready the canvas
 		updateSelectionGrid();
 		generateColors();
-		
+
 		// Ignore input if the chosen mode is AI
 		if (root.getMode() == 1) {
 			handleInput();
@@ -65,6 +65,12 @@ public class Canvas extends JPanel {
 			// Run algorithm for the board
 		}
 	}
+	
+	/** Sets the current board on the screen */
+	public void setBoard(Board board) { this.board = board; }
+	
+	/** Sets the number of valid moves made */
+	public void setValidMoves(int validMoves) { this.validMoves = validMoves; }
 
 	/** Updates the grid used to detect user input */
 	private void updateSelectionGrid() {
@@ -94,7 +100,7 @@ public class Canvas extends JPanel {
 			else i--;
 		}
 	}
-	
+
 	/**
 	 * Calculates the direction of the click
 	 * @param row the row that got clicked
@@ -104,18 +110,18 @@ public class Canvas extends JPanel {
 		int dir = -1;
 		int blockRow = board.getBlockByID(lastClick).getRow();
 		int blockCol = board.getBlockByID(lastClick).getCol();
-		
+
 		if (blockRow == row)
 			dir = (col < blockCol) ? Board.LEFT : Board.RIGHT;
 		else if (blockCol == col)
 			dir = (row < blockRow) ? Board.UP : Board.DOWN;
-		
+
 		return dir;
 	}
 
 	/** Handles the user's mouse input */
 	private void handleInput() {
-		addMouseListener(new MouseListener() {
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Check what Tile got clicked
@@ -124,31 +130,31 @@ public class Canvas extends JPanel {
 						if (selectGrid[i][j].contains(e.getX(), e.getY())) {
 							if (i > 0 && i <= board.getHeight() && j > 0 && j <= board.getWidth()) {
 								int blockID = board.getGrid()[i - 1][j - 1];
-								
+
 								// Check what was clicked
 								if (blockID == 0) {
 									if (waitingForClick) {
 										int dir = calculateDirection(i - 1, j - 1);
-										
+
 										if (dir != -1 && board.canBlockBeMoved(lastClick, dir)) {
 											// Update data
 											root.setMovesLabel(++validMoves);
 											board.moveBlock(lastClick, dir);
-											
+
 											// Update whole screen
 											root.repaint();
 											repaint();
 										}
-										
+
 										// Set ready for next click
 										waitingForClick = false;
-										
+
 										// Check if the game is over
 										if (board.isGameOver()) {
 											int n = JOptionPane.showOptionDialog(root, "Total Moves: " + validMoves, "Game Over!",
-													 JOptionPane.YES_NO_CANCEL_OPTION,
-													 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-											
+													JOptionPane.YES_NO_CANCEL_OPTION,
+													JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
 											if (n == 0) {
 												System.exit(0);
 											} else {
@@ -164,21 +170,13 @@ public class Canvas extends JPanel {
 										waitingForClick = true;
 									}
 								}
-								
+
 								return;
 							}
 						}
 					}
 				}
 			}
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
 		});
 	}
 
@@ -190,7 +188,7 @@ public class Canvas extends JPanel {
 		// Update the square size
 		xSize = getWidth() / (board.getWidth() + BORDER);
 		ySize = getHeight() / (board.getHeight() + BORDER);
-		
+
 		// Update the selection grid
 		updateSelectionGrid();
 
@@ -205,8 +203,6 @@ public class Canvas extends JPanel {
 		g.setColor(Color.GRAY);
 		g.fillRect(exitCol * xSize, exitRow * ySize, xSize, ySize);
 		g.fillRect(xSize, ySize, board.getWidth() * xSize, board.getHeight() * ySize);
-		
-		// Paint the ground gray
 
 		// Paint the board
 		for (Entry<Integer, Block> temp: board.getBlocks().entrySet()) {
