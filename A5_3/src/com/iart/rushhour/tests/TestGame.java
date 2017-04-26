@@ -90,8 +90,16 @@ public class TestGame {
 	
 	/** Tests the DFS algorithm */
 	@Test
-	public void testDFS() throws IOException {
-		Board board = Utils.loadLevel(2);
-		System.out.print(board.toString());
-	}
+	public void testDFS() {
+		Board board = null;
+		try { board = Utils.loadLevel(1); }
+		catch (IOException e) { e.printStackTrace(); }
+		System.out.println(board.toString(false));
+		
+		if (board == null) System.out.println("NULL");
+		
+		List<Move> moves = Algorithms.DFS(board);
+		System.out.println(moves.size());
+		
+		System.out.println("LMAO");
 }
