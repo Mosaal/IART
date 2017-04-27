@@ -94,12 +94,13 @@ public class TestGame {
 		Board board = null;
 		try { board = Utils.loadLevel(1); }
 		catch (IOException e) { e.printStackTrace(); }
-		System.out.println(board.toString(false));
+		System.out.println(board.toString());
 		
-		if (board == null) System.out.println("NULL");
-		
-		List<Move> moves = Algorithms.DFS(board);
-		System.out.println(moves.size());
-		
-		System.out.println("LMAO");
+//		if (board == null) System.out.println("NULL");
+//		
+//		List<Move> moves = Algorithms.DFS(board);
+//		System.out.println(moves.size());
+//		
+//		System.out.println("LMAO");
+	}
 }
