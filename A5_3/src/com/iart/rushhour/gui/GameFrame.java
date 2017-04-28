@@ -52,7 +52,7 @@ public class GameFrame extends JFrame {
 		backBtn.setFocusPainted(false);
 		backBtn.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		backBtn.addActionListener(e -> {
-			new MainMenuFrame();
+			new MainMenuFrame().setVisible(true);
 			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		});
 		

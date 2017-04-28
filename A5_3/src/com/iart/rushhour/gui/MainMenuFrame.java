@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import com.iart.rushhour.game.Board;
@@ -171,10 +172,15 @@ public class MainMenuFrame extends JFrame {
 		setMinimumSize(new Dimension(300, 300));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
-		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		new MainMenuFrame();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				MainMenuFrame app = new MainMenuFrame();
+				app.setVisible(true);
+			}
+		});
 	}
 }
