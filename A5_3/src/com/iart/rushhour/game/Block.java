@@ -55,13 +55,40 @@ public class Block {
 		this.col = col;
 	}
 
-	/** Returns information of the block in a string */
+	@Override
+	public int hashCode() {
+		int result = 1;
+		final int prime = 31;
+
+		result = prime * result + ID;
+		result = prime * result + row;
+		result = prime * result + col;
+		result = prime * result + length;
+		result = prime * result + orientation;
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+
+		Block b = (Block) obj;
+		if (ID != b.getID())
+			return false;
+
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		String str = "Block #" + ID;
+		String[] oris = new String[] { "Horizontal", "Vertical" };
 
 		str += "\nRow: " + row + ", Col: " + col;
-		str += "\nLength: " + length + "\nOrientation: ";
-		str += (orientation == HOR) ? "Horizontal" : "Vertical";
+		str += "\nLength: " + length;
+		str += "\nOrientation: " + oris[orientation];
 
 		return str;
 	}

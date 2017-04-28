@@ -1,13 +1,17 @@
 package com.iart.rushhour.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
 import com.iart.rushhour.game.Block;
 import com.iart.rushhour.game.Board;
+import com.iart.rushhour.logic.Algorithms;
+import com.iart.rushhour.logic.Move;
 import com.iart.rushhour.logic.Utils;
 
 public class TestGame {
@@ -88,19 +92,25 @@ public class TestGame {
 		catch (IOException e) { e.printStackTrace(); }
 	}
 	
+	/** Tests the BFS algorithm */
+	@Test
+	public void testBFS() {
+		Board board = null;
+		try { board = Utils.loadLevel(1); }
+		catch (IOException e) { e.printStackTrace(); }
+		
+		ArrayList<Move> moves = Algorithms.BFS(board);
+		System.out.println("#Moves: " + moves.size());
+	}
+	
 	/** Tests the DFS algorithm */
 	@Test
 	public void testDFS() {
 		Board board = null;
 		try { board = Utils.loadLevel(1); }
 		catch (IOException e) { e.printStackTrace(); }
-		System.out.println(board.toString());
 		
-//		if (board == null) System.out.println("NULL");
-//		
-//		List<Move> moves = Algorithms.DFS(board);
-//		System.out.println(moves.size());
-//		
-//		System.out.println("LMAO");
+		ArrayList<Move> moves = Algorithms.DFS(board);
+		System.out.println("#Moves: " + moves.size());
 	}
 }

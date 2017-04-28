@@ -10,6 +10,7 @@ import com.iart.rushhour.game.Board;
 
 public class Utils {
 	
+	// Static variables
 	private static int ID;
 	private static int row;
 	private static int col;

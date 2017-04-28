@@ -1,6 +1,7 @@
 package com.iart.rushhour.game;
 
 import java.util.Map.Entry;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Board {
@@ -39,6 +40,28 @@ public class Board {
 				grid[i][j] = 0;
 	}
 
+	/**
+	 * Creates a cloned Board instance
+	 * @param b the board to be cloned
+	 */
+	public Board(Board b) {
+		width = b.getWidth();
+		height = b.getHeight();
+		exitRow = b.getExitRow();
+
+		grid = new int[width][height];
+		blocks = new HashMap<Integer, Block>();
+
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++)
+				grid[i][j] = b.getGrid()[i][j];
+
+		for (Entry<Integer, Block> block: b.getBlocks().entrySet()) {
+			Block bl = block.getValue();
+			blocks.put(bl.getID(), new Block(bl.getID(), bl.getRow(), bl.getCol(), bl.getLength(), bl.getOrientation()));
+		}
+	}
+
 	// Instance methods
 	/** Returns the grid of this board */
 	public int[][] getGrid() { return grid; }
@@ -48,13 +71,13 @@ public class Board {
 
 	/** Returns the height of the board */
 	public final int getHeight() { return height; }
-	
+
 	/** Returns the row of the Exit */
 	public final int getExitRow() { return exitRow; }
 
 	/** Returns the list of blocks on the board */
 	public HashMap<Integer, Block> getBlocks() { return blocks; }
-	
+
 	/** Returns the number of blocks on the board */
 	public int getNumOfBlocks() { return blocks.size(); }
 
@@ -132,7 +155,7 @@ public class Board {
 	 */
 	public boolean canBlockBeMoved(final int blockID, final int direction) {
 		Block block = blocks.get(blockID);
-		
+
 		if (block.getOrientation() == Block.HOR) {
 			if (direction == LEFT && block.getCol() > 0) {
 				if (grid[block.getRow()][block.getCol() - 1] == 0)
@@ -161,7 +184,7 @@ public class Board {
 	 */
 	public void moveBlock(final int blockID, final int direction) {
 		Block block = blocks.get(blockID);
-		
+
 		switch (direction) {
 		case UP:
 			grid[block.getRow() - 1][block.getCol()] = block.getID();
@@ -185,18 +208,49 @@ public class Board {
 			break;
 		}
 	}
-	
+
 	/** Checks if the game is over */
 	public boolean isGameOver() {
 		Block mainBlock = blocks.get(MAIN_BLOCK_ID);
-		
+
 		if (mainBlock.getRow() == exitRow && mainBlock.getCol() + mainBlock.getLength() == width)
 			return true;
-		
+
 		return false;
 	}
 
-	/** Returns the current state of the board in a string */
+	@Override
+	public int hashCode() {
+		int result = 1;
+		final int prime = 31;
+
+		result = prime * result + width;
+		result = prime * result + height;
+		result = prime * result + exitRow;
+		result = prime * result + Arrays.deepHashCode(grid);
+		result = prime * result + ((blocks == null) ? 0 : blocks.hashCode());
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+
+		Board b = (Board) obj;
+		if (width == b.getWidth() && height == b.getHeight() && exitRow == b.getExitRow()) {
+			for (int i = 0; i < height; i++)
+				for (int j = 0; j < width; j++)
+					if (grid[i][j] != b.getGrid()[i][j])
+						return false;
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		String str = "";
 
@@ -211,10 +265,6 @@ public class Board {
 			}
 			str += "\n";
 		}
-
-		str += "\n";
-		for (Entry<Integer, Block> block: blocks.entrySet())
-			str += block.getValue().toString() + "\n\n";
 
 		return str;
 	}

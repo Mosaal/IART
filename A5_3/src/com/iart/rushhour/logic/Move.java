@@ -23,7 +23,7 @@ public class Move {
 	/** Returns the direction of the move */
 	public final int getDirection() { return direction; }
 	
-	/** Returns information of the move in a string */
+	@Override
 	public String toString() {
 		String str = "";
 		String[] dirs = new String[] { "Up", "Down", "Left", "Right" };
