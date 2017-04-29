@@ -17,15 +17,19 @@ public class Algorithms {
 	private static ArrayList<Board> getAdjacentNodes(Board curr) {
 		ArrayList<Board> adjacents = new ArrayList<Board>();
 
+		// Try to move each block on the board
 		for (Entry<Integer, Block> block: curr.getBlocks().entrySet()) {
 			for (int i = 0; i < 4; i++) {
+				// Check if it can be moved
 				if (curr.canBlockBeMoved(block.getKey().intValue(), i)) {
 					Board aux = new Board(curr);
-					
+
+					// Set move and parent of adjacent node
 					aux.setMove(new Move(block.getKey().intValue(), i));
 					aux.moveBlock(block.getKey().intValue(), i);
 					aux.setParent(curr);
-					
+
+					// Add it
 					adjacents.add(aux);
 				}
 			}
@@ -39,31 +43,32 @@ public class Algorithms {
 	 * @param board the initial node
 	 */
 	public static Board BFS(Board board) {
+		// Store all visited nodes
 		ArrayList<Board> visited = new ArrayList<Board>();
+		visited.add(board);
 
-		// Initialize queue and add initial node to it
+		// Queue the first node
 		LinkedList<Board> queue = new LinkedList<Board>();
 		queue.add(board);
 
-		// Loop the queue while it isn't empty
+		// Loop the queue as long as it isn't empty
 		while (!queue.isEmpty()) {
-			Board curr = queue.removeFirst();
+			// Get the node at the front of the queue
+			Board front = queue.removeFirst();
 
-			// Check if current node is the goal
-			if (curr.isGameOver())
-				return curr;
+			// Check if the goal is achieved
+			if (front.isGameOver())
+				return front;
 
 			// Get adjacent nodes
-			ArrayList<Board> adjacents = getAdjacentNodes(curr);
+			ArrayList<Board> adj = getAdjacentNodes(front);
 
-			// Check if it has been visited
-			if (!visited.contains(curr)) {
-				visited.add(curr);
-
-				// Check each adjacent node
-				for (int i = 0; i < adjacents.size(); i++)
-					if (!visited.contains(adjacents.get(i)))
-						queue.add(adjacents.get(i));
+			// Add each unvisited node to the queue
+			for (int i = 0; i < adj.size(); i++) {
+				if (!visited.contains(adj.get(i))) {
+					visited.add(adj.get(i));
+					queue.add(adj.get(i));
+				}
 			}
 		}
 
@@ -75,31 +80,34 @@ public class Algorithms {
 	 * @param board the initial node
 	 */
 	public static Board DFS(Board board) {
+		// Store all visited nodes
 		ArrayList<Board> visited = new ArrayList<Board>();
+		visited.add(board);
 
-		// Initialize stack and add initial node to it
+		// Stack the first node
 		Stack<Board> stack = new Stack<Board>();
 		stack.push(board);
 
-		// Loop the stack while it isn't empty
+		// Loop the stack as long as it isn't empty
 		while (!stack.isEmpty()) {
-			Board curr = stack.pop();
+			// Get the node at the top of the stack
+			Board top = stack.pop();
 
-			// Check if current node is the goal
-			if (curr.isGameOver())
-				return curr;
+			// Check if the goal is achieved
+			if (top.isGameOver())
+				return top;
 
 			// Get adjacent nodes
-			ArrayList<Board> adjacents = getAdjacentNodes(curr);
+			ArrayList<Board> adj = getAdjacentNodes(top);
 
-			// Check if it has been visited
-			if (!visited.contains(curr)) {
-				visited.add(curr);
-
-				// Check each adjacent node
-				for (int i = 0; i < adjacents.size(); i++)
-					if (!visited.contains(adjacents.get(i)))
-						stack.push(adjacents.get(i));
+			// Add the next unvisited node to the stack
+			for (int i = 0; i < adj.size(); i++) {
+				if (!visited.contains(adj.get(i))) {
+					stack.push(top);
+					stack.push(adj.get(i));
+					visited.add(adj.get(i));
+					break;
+				}
 			}
 		}
 

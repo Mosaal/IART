@@ -14,8 +14,8 @@ public class Utils {
 	private static int ID;
 	private static int row;
 	private static int col;
-	private static int orientation;
 	private static int length;
+	private static int orientation;
 	
 	/** Searches for the levels on their directory and loads them to the combo box */
 	public static String[] searchLevels() {
@@ -44,8 +44,8 @@ public class Utils {
 			ID = Integer.parseInt(block[0]);
 			row = Integer.parseInt(block[1]);
 			col = Integer.parseInt(block[2]);
-			orientation = Integer.parseInt(block[3]);
 			length = Integer.parseInt(block[4]);
+			orientation = Integer.parseInt(block[3]);
 		} catch (NumberFormatException e) {
 			return false;
 		}

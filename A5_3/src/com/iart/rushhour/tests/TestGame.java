@@ -97,8 +97,8 @@ public class TestGame {
 		try { board = Utils.loadLevel(1); }
 		catch (IOException e) { e.printStackTrace(); }
 
-		Board finalNode = Algorithms.BFS(board);
-		assertNotEquals(null, finalNode);
+		Board lastNode = Algorithms.BFS(board);
+		assertNotEquals(null, lastNode);
 	}
 
 	/** Tests the DFS algorithm */
@@ -108,7 +108,7 @@ public class TestGame {
 		try { board = Utils.loadLevel(1); }
 		catch (IOException e) { e.printStackTrace(); }
 
-		Board finalNode = Algorithms.DFS(board);
-		assertNotEquals(null, finalNode);
+		Board lastNode = Algorithms.DFS(board);
+		assertNotEquals(null, lastNode);
 	}
 }
