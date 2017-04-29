@@ -1,8 +1,10 @@
 package com.iart.rushhour.game;
 
-import java.util.Map.Entry;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import com.iart.rushhour.logic.Move;
 
 public class Board {
 
@@ -11,6 +13,9 @@ public class Board {
 	private final int width;
 	private final int height;
 	private final int exitRow;
+	
+	private Move move;
+	private Board parent;
 	private HashMap<Integer, Block> blocks;
 
 	// Static variables
@@ -28,6 +33,9 @@ public class Board {
 	 * @param exitRC specifies the row or column of the exit
 	 */
 	public Board(final int width, final int height, final int exitRow) {
+		move = null;
+		parent = null;
+		
 		this.width = width;
 		this.height = height;
 		this.exitRow = exitRow;
@@ -63,6 +71,12 @@ public class Board {
 	}
 
 	// Instance methods
+	/** Returns the move that reaches this node */
+	public Move getMove() { return move; }
+	
+	/** Returns the parent of this node */
+	public Board getParent() { return parent; }
+	
 	/** Returns the grid of this board */
 	public int[][] getGrid() { return grid; }
 
@@ -87,6 +101,18 @@ public class Board {
 	 */
 	public Block getBlockByID(final int ID) { return blocks.containsKey(ID) ? blocks.get(ID) : null; }
 
+	/**
+	 * Sets the move that reaches this node
+	 * @param parent the move to be set
+	 */
+	public void setMove(Move move) { this.move = move; }
+	
+	/**
+	 * Sets the parent of this node
+	 * @param parent the parent to be set
+	 */
+	public void setParent(Board parent) { this.parent = parent; }
+	
 	/**
 	 * Checks if the block is out of bounds of the board
 	 * @param newBlock new block to be added to the board

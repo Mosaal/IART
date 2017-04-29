@@ -11,11 +11,32 @@ import com.iart.rushhour.game.Board;
 public class Algorithms {
 
 	/**
+	 * Returns all the adjacent nodes to a given node
+	 * @param curr the node whose adjacent nodes will be returned
+	 */
+	private static ArrayList<Board> getAdjacentNodes(Board curr) {
+		ArrayList<Board> adjacents = new ArrayList<Board>();
+
+		for (Entry<Integer, Block> block: curr.getBlocks().entrySet()) {
+			for (int i = 0; i < 4; i++) {
+				if (curr.canBlockBeMoved(block.getKey().intValue(), i)) {
+					Board aux = new Board(curr);
+					aux.setMove(new Move(block.getKey().intValue(), i));
+					aux.moveBlock(block.getKey().intValue(), i);
+					aux.setParent(curr);
+					adjacents.add(aux);
+				}
+			}
+		}
+
+		return adjacents;
+	}
+
+	/**
 	 * A Breadth First Search algorithm implementation
 	 * @param board the initial node
 	 */
-	public static ArrayList<Move> BFS(Board board) {
-		ArrayList<Move> moves = new ArrayList<Move>();
+	public static Board BFS(Board board) {
 		ArrayList<Board> visited = new ArrayList<Board>();
 
 		// Initialize queue and add initial node to it
@@ -25,31 +46,22 @@ public class Algorithms {
 		// Loop the queue while it isn't empty
 		while (!queue.isEmpty()) {
 			Board curr = queue.removeFirst();
-			ArrayList<Board> adjacents = new ArrayList<Board>();
 
 			// Check if current node is the goal
-			if (curr.isGameOver()) {
-				System.out.print(curr.toString());
-				return moves;
-			}
+			if (curr.isGameOver())
+				return curr;
 
 			// Get adjacent nodes
-			for (Entry<Integer, Block> block: curr.getBlocks().entrySet()) {
-				for (int i = 0; i < 4; i++) {
-					if (curr.canBlockBeMoved(block.getKey().intValue(), i)) {
-						Board aux = new Board(curr);
-						aux.moveBlock(block.getKey().intValue(), i);
-						adjacents.add(aux);
-					}
-				}
-			}
+			ArrayList<Board> adjacents = getAdjacentNodes(curr);
 
-			// Check each adjacent node
-			for (int i = 0; i < adjacents.size(); i++) {
-				if (!visited.contains(adjacents.get(i))) {
-					visited.add(adjacents.get(i));
-					queue.add(adjacents.get(i));
-				}
+			// Check if it has been visited
+			if (!visited.contains(curr)) {
+				visited.add(curr);
+
+				// Check each adjacent node
+				for (int i = 0; i < adjacents.size(); i++)
+					if (!visited.contains(adjacents.get(i)))
+						queue.add(adjacents.get(i));
 			}
 		}
 
@@ -60,8 +72,7 @@ public class Algorithms {
 	 * A Depth First Search algorithm implementation
 	 * @param board the initial node
 	 */
-	public static ArrayList<Move> DFS(Board board) {
-		ArrayList<Move> moves = new ArrayList<Move>();
+	public static Board DFS(Board board) {
 		ArrayList<Board> visited = new ArrayList<Board>();
 
 		// Initialize stack and add initial node to it
@@ -73,25 +84,20 @@ public class Algorithms {
 			Board curr = stack.pop();
 
 			// Check if current node is the goal
-			if (curr.isGameOver()) {
-				System.out.print(curr.toString());
-				return moves;
-			}
+			if (curr.isGameOver())
+				return curr;
 
-			// Check if node was visited
+			// Get adjacent nodes
+			ArrayList<Board> adjacents = getAdjacentNodes(curr);
+
+			// Check if it has been visited
 			if (!visited.contains(curr)) {
 				visited.add(curr);
 
-				// Get adjacent nodes
-				for (Entry<Integer, Block> block: curr.getBlocks().entrySet()) {
-					for (int i = 0; i < 4; i++) {
-						if (curr.canBlockBeMoved(block.getKey().intValue(), i)) {
-							Board aux = new Board(curr);
-							aux.moveBlock(block.getKey().intValue(), i);
-							stack.push(aux);
-						}
-					}
-				}
+				// Check each adjacent node
+				for (int i = 0; i < adjacents.size(); i++)
+					if (!visited.contains(adjacents.get(i)))
+						stack.push(adjacents.get(i));
 			}
 		}
 
