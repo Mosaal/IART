@@ -39,7 +39,9 @@ public class Algorithms {
 	}
 
 	/**
-	 * A Breadth First Search algorithm implementation
+	 * A Breadth First Search algorithm implementation<br>
+	 * Guarantees the minimum amount of moves to the exit<br>
+	 * {@link http://web.mit.edu/eranki/www/tutorials/search/}
 	 * @param board the initial node
 	 */
 	public static Board BFS(Board board) {
@@ -76,7 +78,9 @@ public class Algorithms {
 	}
 
 	/**
-	 * A Depth First Search algorithm implementation
+	 * A Depth First Search algorithm implementation<br>
+	 * Does not guarantee the minimum amount of moves to the exit<br>
+	 * {@link http://web.mit.edu/eranki/www/tutorials/search/}
 	 * @param board the initial node
 	 */
 	public static Board DFS(Board board) {
@@ -115,10 +119,17 @@ public class Algorithms {
 	}
 
 	/**
-	 * An A* algorithm implementation
+	 * An A* algorithm implementation<br>
+	 * The following are the admissible heuristics:<br>
+	 * - the distance of the main block to the exit<br>
+	 * - the number of blocks blocking the way to the exit<br>
+	 * - the distance of the main block to the exit plus the the number of blocks blocking the way to the exit<br>
+	 * {@link http://web.mit.edu/eranki/www/tutorials/search/}
 	 * @param board the initial node
 	 */
 	public static ArrayList<Move> AStar(Board board) {
+		
+		
 		return null;
 	}
 }
