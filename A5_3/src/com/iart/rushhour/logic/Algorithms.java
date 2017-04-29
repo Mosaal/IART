@@ -11,7 +11,7 @@ import com.iart.rushhour.game.Board;
 public class Algorithms {
 
 	/**
-	 * Returns all the adjacent nodes to a given node
+	 * Returns all the adjacent nodes of a given node
 	 * @param curr the node whose adjacent nodes will be returned
 	 */
 	private static ArrayList<Board> getAdjacentNodes(Board curr) {
@@ -21,9 +21,11 @@ public class Algorithms {
 			for (int i = 0; i < 4; i++) {
 				if (curr.canBlockBeMoved(block.getKey().intValue(), i)) {
 					Board aux = new Board(curr);
+					
 					aux.setMove(new Move(block.getKey().intValue(), i));
 					aux.moveBlock(block.getKey().intValue(), i);
 					aux.setParent(curr);
+					
 					adjacents.add(aux);
 				}
 			}

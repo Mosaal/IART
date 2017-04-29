@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
-import java.util.Stack;
 
 import org.junit.Test;
 
 import com.iart.rushhour.game.Block;
 import com.iart.rushhour.game.Board;
 import com.iart.rushhour.logic.Algorithms;
-import com.iart.rushhour.logic.Move;
 import com.iart.rushhour.logic.Utils;
 
 public class TestGame {
@@ -100,45 +98,17 @@ public class TestGame {
 		catch (IOException e) { e.printStackTrace(); }
 
 		Board finalNode = Algorithms.BFS(board);
-		Stack<Move> moves = new Stack<Move>();
-
-		boolean hasParent = true;
-		Board lastNode = finalNode;
-		
-		while (hasParent) {
-			if (lastNode.getParent() != null) {
-				moves.push(lastNode.getMove());
-				lastNode = lastNode.getParent();
-			} else {
-				hasParent = false;
-			}
-		}
-		
-		assertEquals(25, moves.size());
+		assertNotEquals(null, finalNode);
 	}
 
 	/** Tests the DFS algorithm */
 	@Test
 	public void testDFS() {
-//		Board board = null;
-//		try { board = Utils.loadLevel(1); }
-//		catch (IOException e) { e.printStackTrace(); }
-//
-//		Board finalNode = Algorithms.DFS(board);
-//		Stack<Move> moves = new Stack<Move>();
-//
-//		boolean hasParent = true;
-//		Board lastNode = finalNode;
-//		
-//		while (hasParent) {
-//			if (lastNode.getParent() != null) {
-//				moves.push(lastNode.getMove());
-//				lastNode = lastNode.getParent();
-//			} else {
-//				hasParent = false;
-//			}
-//		}
-//		
-//		System.out.println("#moves: " + moves.size());
+		Board board = null;
+		try { board = Utils.loadLevel(1); }
+		catch (IOException e) { e.printStackTrace(); }
+
+		Board finalNode = Algorithms.DFS(board);
+		assertNotEquals(null, finalNode);
 	}
 }
