@@ -32,7 +32,7 @@ public class Canvas extends JPanel {
 	private HashMap<Integer, Color> colors;
 
 	private final int BORDER = 2;
-	private final int OFFSET = 4;
+	private final int OFFSET = 6;
 	private final int ARC_WIDTH = 25;
 	private final String[] options = new String[] { "Quit", "Main Menu" };
 
@@ -65,10 +65,10 @@ public class Canvas extends JPanel {
 			// Run algorithm for the board
 		}
 	}
-	
+
 	/** Sets the current board on the screen */
 	public void setBoard(Board board) { this.board = board; }
-	
+
 	/** Sets the number of valid moves made */
 	public void setValidMoves(int validMoves) { this.validMoves = validMoves; }
 
@@ -140,10 +140,6 @@ public class Canvas extends JPanel {
 											// Update data
 											root.setMovesLabel(++validMoves);
 											board.moveBlock(lastClick, dir);
-
-											// Update whole screen
-											root.repaint();
-											repaint();
 										}
 
 										// Set ready for next click
@@ -170,6 +166,10 @@ public class Canvas extends JPanel {
 										waitingForClick = true;
 									}
 								}
+								
+								// Update whole screen
+								root.repaint();
+								repaint();
 
 								return;
 							}
@@ -204,7 +204,7 @@ public class Canvas extends JPanel {
 		g.fillRect(exitCol * xSize, exitRow * ySize, xSize, ySize);
 		g.fillRect(xSize, ySize, board.getWidth() * xSize, board.getHeight() * ySize);
 
-		// Paint the board
+		// Paint the blocks
 		for (Entry<Integer, Block> temp: board.getBlocks().entrySet()) {
 			Block block = temp.getValue();
 
@@ -212,14 +212,30 @@ public class Canvas extends JPanel {
 			g.setColor(colors.get(block.getID()));
 			if (block.getOrientation() == Block.HOR) {
 				g.fillRoundRect((block.getCol() * xSize) + (OFFSET / 2) + xSize,
-						(block.getRow() * ySize) + (OFFSET / 2) + ySize,
-						(xSize * block.getLength()) - OFFSET, ySize - OFFSET,
-						ARC_WIDTH, ARC_WIDTH);
+								(block.getRow() * ySize) + (OFFSET / 2) + ySize,
+								(xSize * block.getLength()) - OFFSET, ySize - OFFSET,
+								ARC_WIDTH, ARC_WIDTH);
 			} else {
 				g.fillRoundRect((block.getCol() * xSize) + (OFFSET / 2) + xSize,
-						(block.getRow() * ySize) + (OFFSET / 2) + ySize,
-						xSize - OFFSET, (ySize * block.getLength()) - OFFSET,
-						ARC_WIDTH, ARC_WIDTH);
+								(block.getRow() * ySize) + (OFFSET / 2) + ySize,
+								xSize - OFFSET, (ySize * block.getLength()) - OFFSET,
+								ARC_WIDTH, ARC_WIDTH);
+			}
+		}
+
+		// Paint the currently selected block
+		if (waitingForClick) {
+			Block block = board.getBlockByID(lastClick);
+			
+			g.setColor(new Color(255, 255, 0));
+			if (block.getOrientation() == Block.HOR) {
+				g.drawRect((block.getCol() * xSize) + xSize,
+							(block.getRow() * ySize) + ySize,
+							xSize * block.getLength(), ySize);
+			} else {
+				g.drawRect((block.getCol() * xSize) + xSize,
+							(block.getRow() * ySize) + ySize,
+							xSize, ySize * block.getLength());
 			}
 		}
 	}

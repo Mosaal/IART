@@ -86,9 +86,9 @@ public class GameFrame extends JFrame {
 		int centerX = (int) screenSize.getWidth() / 2;
 		int centerY = (int) screenSize.getHeight() / 2;
 		
-		pack();
 		setContentPane(mainPanel);
-		setMinimumSize(new Dimension(450, 450));
+		setPreferredSize(new Dimension(450, 450));
+		pack();
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
 		setVisible(true);
