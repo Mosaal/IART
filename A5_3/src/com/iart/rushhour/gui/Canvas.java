@@ -8,12 +8,15 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
+// import java.util.Stack;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.iart.rushhour.game.Block;
 import com.iart.rushhour.game.Board;
+//import com.iart.rushhour.logic.Algorithms;
+//import com.iart.rushhour.logic.Move;
 
 public class Canvas extends JPanel {
 
@@ -28,6 +31,7 @@ public class Canvas extends JPanel {
 
 	private Board board;
 	private GameFrame root;
+	// private Stack<Move> moves;
 	private Tile[][] selectGrid;
 	private HashMap<Integer, Color> colors;
 
@@ -60,10 +64,52 @@ public class Canvas extends JPanel {
 		// Ignore input if the chosen mode is AI
 		if (root.getMode() == 1) {
 			handleInput();
-		} else {
-			// TODO
-			// Run algorithm for the board
-		}
+		} // else {
+//			(new Thread(new Runnable() {
+//				@Override
+//				public void run() {
+//					// Run algorithm
+//					Board lastNode = Algorithms.AStar(board, Algorithms.DISTANCE_NUM_BLOCKING_HEURISTIC);
+//
+//					// Get moves
+//					moves = new Stack<Move>();
+//					while (lastNode.getParent() != null) {
+//						moves.push(lastNode.getMove());
+//						lastNode = lastNode.getParent();
+//					}
+//
+//					// Show moves
+//					while (!moves.isEmpty()) {
+//						// Wait for one second
+//						try { Thread.sleep(1000); }
+//						catch (InterruptedException e) { e.printStackTrace(); }
+//						
+//						// Get move at the top of the stack
+//						Move top = moves.pop();
+//						board.moveBlock(top.getBlockID(), top.getDirection());
+//
+//						// Update whole screen
+//						root.setMovesLabel(++validMoves);
+//						root.repaint();
+//						repaint();
+//					}
+//					
+//					// Check if the game is over
+//					if (board.isGameOver()) {
+//						int n = JOptionPane.showOptionDialog(root, "Total Moves: " + validMoves, "Game Over!",
+//								JOptionPane.YES_NO_CANCEL_OPTION,
+//								JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+//
+//						if (n == 0) {
+//							System.exit(0);
+//						} else {
+//							new MainMenuFrame().setVisible(true);
+//							root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
+//						}
+//					}
+//				}
+//			})).start();
+//		}
 	}
 
 	/** Sets the current board on the screen */
@@ -154,7 +200,7 @@ public class Canvas extends JPanel {
 											if (n == 0) {
 												System.exit(0);
 											} else {
-												new MainMenuFrame();
+												new MainMenuFrame().setVisible(true);
 												root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
 											}
 										}
@@ -166,7 +212,7 @@ public class Canvas extends JPanel {
 										waitingForClick = true;
 									}
 								}
-								
+
 								// Update whole screen
 								root.repaint();
 								repaint();
@@ -212,30 +258,30 @@ public class Canvas extends JPanel {
 			g.setColor(colors.get(block.getID()));
 			if (block.getOrientation() == Block.HOR) {
 				g.fillRoundRect((block.getCol() * xSize) + (OFFSET / 2) + xSize,
-								(block.getRow() * ySize) + (OFFSET / 2) + ySize,
-								(xSize * block.getLength()) - OFFSET, ySize - OFFSET,
-								ARC_WIDTH, ARC_WIDTH);
+						(block.getRow() * ySize) + (OFFSET / 2) + ySize,
+						(xSize * block.getLength()) - OFFSET, ySize - OFFSET,
+						ARC_WIDTH, ARC_WIDTH);
 			} else {
 				g.fillRoundRect((block.getCol() * xSize) + (OFFSET / 2) + xSize,
-								(block.getRow() * ySize) + (OFFSET / 2) + ySize,
-								xSize - OFFSET, (ySize * block.getLength()) - OFFSET,
-								ARC_WIDTH, ARC_WIDTH);
+						(block.getRow() * ySize) + (OFFSET / 2) + ySize,
+						xSize - OFFSET, (ySize * block.getLength()) - OFFSET,
+						ARC_WIDTH, ARC_WIDTH);
 			}
 		}
 
 		// Paint the currently selected block
 		if (waitingForClick) {
 			Block block = board.getBlockByID(lastClick);
-			
+
 			g.setColor(new Color(255, 255, 0));
 			if (block.getOrientation() == Block.HOR) {
 				g.drawRect((block.getCol() * xSize) + xSize,
-							(block.getRow() * ySize) + ySize,
-							xSize * block.getLength(), ySize);
+						(block.getRow() * ySize) + ySize,
+						xSize * block.getLength(), ySize);
 			} else {
 				g.drawRect((block.getCol() * xSize) + xSize,
-							(block.getRow() * ySize) + ySize,
-							xSize, ySize * block.getLength());
+						(block.getRow() * ySize) + ySize,
+						xSize, ySize * block.getLength());
 			}
 		}
 	}
