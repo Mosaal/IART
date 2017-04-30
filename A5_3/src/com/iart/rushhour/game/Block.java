@@ -12,6 +12,7 @@ public class Block {
 	// Static variables
 	public static final int HOR = 0;
 	public static final int VER = 1;
+	public static final int MAIN_BLOCK_ID = 1;
 
 	/**
 	 * Creates a Block instance

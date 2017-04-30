@@ -9,6 +9,7 @@ import com.iart.rushhour.logic.Move;
 public class Board {
 
 	// Instance variables
+	private int f, g;
 	private int[][] grid;
 	private final int width;
 	private final int height;
@@ -23,7 +24,6 @@ public class Board {
 	public static final int DOWN = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
-	public static final int MAIN_BLOCK_ID = 1;
 
 	/**
 	 * Creates a Board instance
@@ -71,6 +71,12 @@ public class Board {
 	}
 
 	// Instance methods
+	/** Returns the f value of this node */
+	public int getF() { return f; }
+	
+	/** Returns the g value of this node */
+	public int getG() { return g; }
+	
 	/** Returns the move that reaches this node */
 	public Move getMove() { return move; }
 	
@@ -101,6 +107,18 @@ public class Board {
 	 */
 	public Block getBlockByID(final int ID) { return blocks.containsKey(ID) ? blocks.get(ID) : null; }
 
+	/**
+	 * Sets the f value of this node
+	 * @param f the f value to be set
+	 */
+	public void setF(int f) { this.f = f; }
+	
+	/**
+	 * Sets the g value of this node
+	 * @param g the g value to be set
+	 */
+	public void setG(int g) { this.g = g; }
+	
 	/**
 	 * Sets the move that reaches this node
 	 * @param parent the move to be set
@@ -237,7 +255,7 @@ public class Board {
 
 	/** Checks if the game is over */
 	public boolean isGameOver() {
-		Block mainBlock = blocks.get(MAIN_BLOCK_ID);
+		Block mainBlock = blocks.get(Block.MAIN_BLOCK_ID);
 
 		if (mainBlock.getRow() == exitRow && mainBlock.getCol() + mainBlock.getLength() == width)
 			return true;

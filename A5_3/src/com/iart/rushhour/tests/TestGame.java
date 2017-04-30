@@ -14,6 +14,9 @@ import com.iart.rushhour.logic.Utils;
 
 public class TestGame {
 
+	private final int HEURISTIC = 0;
+	private final int TEST_LEVEL = 1;
+	
 	/** Tests the creation of the board and its components */
 	@Test
 	public void testBlockCreation() {
@@ -86,7 +89,7 @@ public class TestGame {
 	/** Tests the loading of a level */
 	@Test
 	public void testLevelLoading() {
-		try { assertNotEquals(null, Utils.loadLevel(1)); }
+		try { assertNotEquals(null, Utils.loadLevel(TEST_LEVEL)); }
 		catch (IOException e) { e.printStackTrace(); }
 	}
 
@@ -94,7 +97,7 @@ public class TestGame {
 	@Test
 	public void testBFS() {
 		Board board = null;
-		try { board = Utils.loadLevel(1); }
+		try { board = Utils.loadLevel(TEST_LEVEL); }
 		catch (IOException e) { e.printStackTrace(); }
 
 		Board lastNode = Algorithms.BFS(board);
@@ -105,10 +108,23 @@ public class TestGame {
 	@Test
 	public void testDFS() {
 		Board board = null;
-		try { board = Utils.loadLevel(1); }
+		try { board = Utils.loadLevel(TEST_LEVEL); }
 		catch (IOException e) { e.printStackTrace(); }
 
 		Board lastNode = Algorithms.DFS(board);
 		assertNotEquals(null, lastNode);
+	}
+	
+	/** Tests the A* açgorithm */
+	@Test
+	public void testAStar() {
+		Board board = null;
+		try { board = Utils.loadLevel(TEST_LEVEL); }
+		catch (IOException e) { e.printStackTrace(); }
+		
+		if (HEURISTIC > -1 && HEURISTIC < 3) {
+			Board lastNode = Algorithms.AStar(board, HEURISTIC);
+			assertNotEquals(null, lastNode);
+		}
 	}
 }

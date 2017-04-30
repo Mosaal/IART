@@ -44,8 +44,8 @@ public class Utils {
 			ID = Integer.parseInt(block[0]);
 			row = Integer.parseInt(block[1]);
 			col = Integer.parseInt(block[2]);
-			length = Integer.parseInt(block[4]);
-			orientation = Integer.parseInt(block[3]);
+			length = Integer.parseInt(block[3]);
+			orientation = Integer.parseInt(block[4]);
 		} catch (NumberFormatException e) {
 			return false;
 		}
