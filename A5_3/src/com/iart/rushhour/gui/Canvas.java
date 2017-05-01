@@ -8,15 +8,15 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
-// import java.util.Stack;
+import java.util.Stack;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.iart.rushhour.game.Block;
 import com.iart.rushhour.game.Board;
-//import com.iart.rushhour.logic.Algorithms;
-//import com.iart.rushhour.logic.Move;
+import com.iart.rushhour.logic.Algorithms;
+import com.iart.rushhour.logic.Move;
 
 public class Canvas extends JPanel {
 
@@ -31,7 +31,7 @@ public class Canvas extends JPanel {
 
 	private Board board;
 	private GameFrame root;
-	// private Stack<Move> moves;
+	private Thread aiThread;
 	private Tile[][] selectGrid;
 	private HashMap<Integer, Color> colors;
 
@@ -46,6 +46,7 @@ public class Canvas extends JPanel {
 	 * @param root the parent frame of this panel
 	 */
 	public Canvas(Board board, GameFrame root) {
+		aiThread = null;
 		this.root = root;
 		this.board = board;
 
@@ -62,54 +63,10 @@ public class Canvas extends JPanel {
 		generateColors();
 
 		// Ignore input if the chosen mode is AI
-		if (root.getMode() == 1) {
+		if (root.getMode() == 0)
+			handleThread();
+		else if (root.getMode() == 1)
 			handleInput();
-		} // else {
-//			(new Thread(new Runnable() {
-//				@Override
-//				public void run() {
-//					// Run algorithm
-//					Board lastNode = Algorithms.AStar(board, Algorithms.DISTANCE_NUM_BLOCKING_HEURISTIC);
-//
-//					// Get moves
-//					moves = new Stack<Move>();
-//					while (lastNode.getParent() != null) {
-//						moves.push(lastNode.getMove());
-//						lastNode = lastNode.getParent();
-//					}
-//
-//					// Show moves
-//					while (!moves.isEmpty()) {
-//						// Wait for one second
-//						try { Thread.sleep(1000); }
-//						catch (InterruptedException e) { e.printStackTrace(); }
-//						
-//						// Get move at the top of the stack
-//						Move top = moves.pop();
-//						board.moveBlock(top.getBlockID(), top.getDirection());
-//
-//						// Update whole screen
-//						root.setMovesLabel(++validMoves);
-//						root.repaint();
-//						repaint();
-//					}
-//					
-//					// Check if the game is over
-//					if (board.isGameOver()) {
-//						int n = JOptionPane.showOptionDialog(root, "Total Moves: " + validMoves, "Game Over!",
-//								JOptionPane.YES_NO_CANCEL_OPTION,
-//								JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-//
-//						if (n == 0) {
-//							System.exit(0);
-//						} else {
-//							new MainMenuFrame().setVisible(true);
-//							root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
-//						}
-//					}
-//				}
-//			})).start();
-//		}
 	}
 
 	/** Sets the current board on the screen */
@@ -145,6 +102,61 @@ public class Canvas extends JPanel {
 			if (!colors.containsValue(color) && !color.equals(Color.BLACK)) colors.put(i, color);
 			else i--;
 		}
+	}
+	
+	public void handleThread() {
+		// Terminate it if it is running already
+		if (aiThread != null)
+			aiThread = null;
+		
+		// Initialize the thread
+		aiThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// Run algorithm
+				Board lastNode = Algorithms.AStar(board, Algorithms.DISTANCE_HEURISTIC);
+
+				// Get moves
+				Stack<Move> moves = new Stack<Move>();
+				while (lastNode.getParent() != null) {
+					moves.push(lastNode.getMove());
+					lastNode = lastNode.getParent();
+				}
+				
+				// Show moves
+				while (!moves.isEmpty()) {
+					// Wait for one second
+					try { Thread.sleep(1000); }
+					catch (InterruptedException e) { e.printStackTrace(); }
+					
+					// Get move at the top of the stack
+					Move top = moves.pop();
+					board.moveBlock(top.getBlockID(), top.getDirection());
+
+					// Update whole screen
+					root.setMovesLabel(++validMoves);
+					root.repaint();
+					repaint();
+				}
+				
+				// Check if the game is over
+				if (board.isGameOver()) {
+					int n = JOptionPane.showOptionDialog(root, "Total Moves: " + validMoves, "Game Over!",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+					if (n == 0) {
+						System.exit(0);
+					} else {
+						new MainMenuFrame().setVisible(true);
+						root.dispatchEvent(new WindowEvent(root, WindowEvent.WINDOW_CLOSING));
+					}
+				}
+			}
+		});
+		
+		// And start it
+		aiThread.start();
 	}
 
 	/**
