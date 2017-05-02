@@ -115,7 +115,7 @@ public class TestGame {
 		assertNotEquals(null, lastNode);
 	}
 	
-	/** Tests the A* açgorithm */
+	/** Tests the A* algorithm */
 	@Test
 	public void testAStar() {
 		Board board = null;
