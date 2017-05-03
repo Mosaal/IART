@@ -13,8 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import com.iart.rushhour.logic.Utils;
-
 public class MainMenuState extends GameState {
 
 	private static final long serialVersionUID = 3078891038492049408L;

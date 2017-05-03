@@ -10,14 +10,14 @@ public class Canvas extends JPanel {
 	private static final long serialVersionUID = 2924971106133287334L;
 
 	// Instance variables
-	private GameStateManager gsm;
+	// private GameStateManager gsm;
 	
 	/**
 	 * Creates a Canvas instance
 	 * @param pgs the canvas' parent state
 	 */
 	public Canvas(GameStateManager gsm) {
-		this.gsm = gsm;
+		// this.gsm = gsm;
 	}
 	
 	// Instance methods
