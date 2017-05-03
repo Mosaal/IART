@@ -5,6 +5,9 @@ import com.iart.rushhour.app.Application;
 public class GameStateManager {
 
 	// Instance variables
+	public int mode;
+	public int level;
+	
 	private Application root;
 	private GameState gameState;
 	

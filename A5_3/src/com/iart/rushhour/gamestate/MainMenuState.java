@@ -1,6 +1,7 @@
 package com.iart.rushhour.gamestate;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -29,7 +30,9 @@ public class MainMenuState extends GameState {
 	 */
 	protected MainMenuState(GameStateManager gsm) {
 		super(gsm);
+		
 		gsm.getRoot().setResizable(false);
+		gsm.getRoot().setSize(new Dimension(400, 450));
 		
 		bgImage = new ImageIcon("res/background.png");
 		
@@ -64,7 +67,8 @@ public class MainMenuState extends GameState {
 		gbc_startBtn.gridy = 1;
 		add(startBtn, gbc_startBtn);
 		
-		levelCbx = new JComboBox<String>(Utils.searchLevels());
+		levelCbx = new JComboBox<String>();
+		// levelCbx = new JComboBox<String>(Utils.searchLevels());
 		levelCbx.setSelectedIndex(0);
 		levelCbx.setFont(new Font("Monospaced", Font.PLAIN, 15));
 		
@@ -90,7 +94,6 @@ public class MainMenuState extends GameState {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
 		// Draw background image
 		bgImage.paintIcon(this, g, 0, 0);
 	}
