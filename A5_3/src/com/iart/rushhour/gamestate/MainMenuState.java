@@ -108,6 +108,7 @@ public class MainMenuState extends GameState {
 			if (e.getActionCommand().equals("Start")) {
 				gsm.mode = (aiBtn.isSelected()) ? 0 : 1;
 				gsm.level = levelCbx.getSelectedIndex() + 1;
+				gsm.board = Utils.loadLevel(gsm.level);
 				gsm.setState(GameStateManager.PLAY_GAME_STATE);
 			}
 		});

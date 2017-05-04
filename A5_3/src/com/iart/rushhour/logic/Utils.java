@@ -73,49 +73,53 @@ public class Utils {
 	 * @param level level to be loaded
 	 * @throws IOException
 	 */
-	public static Board loadLevel(final int level) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File("res/levels/Level" + level + ".txt")));
-		
-		// Read first line
-		String line = br.readLine();
-		int numBlocks = Integer.parseInt(line);
-		
-		// Read second line
-		line = br.readLine();
-		String[] dimension = line.split(":");
-		
-		// Parse and validate size of the board
-		int width = Integer.parseInt(dimension[0]);
-		int height = Integer.parseInt(dimension[1]);
-		int exitRow = Integer.parseInt(dimension[2]);
-		
-		if (width <= 0 || height <= 0) {
+	public static Board loadLevel(final int level) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File("res/levels/Level" + level + ".txt")));
+			
+			// Read first line
+			String line = br.readLine();
+			int numBlocks = Integer.parseInt(line);
+			
+			// Read second line
+			line = br.readLine();
+			String[] dimension = line.split(":");
+			
+			// Parse and validate size of the board
+			int width = Integer.parseInt(dimension[0]);
+			int height = Integer.parseInt(dimension[1]);
+			int exitRow = Integer.parseInt(dimension[2]);
+			
+			if (width <= 0 || height <= 0) {
+				br.close();
+				return null;
+			}
+			
+			// Parse and validate information about the blocks
+			int i = 0;
+			Block[] blocks = new Block[numBlocks];
+			while ((line = br.readLine()) != null) {
+				if (validArgs(width, height, exitRow, line.split(":"))) {
+					blocks[i++] = new Block(ID, row, col, length, orientation);
+				} else {
+					br.close();
+					return null;
+				}
+			}
+			
+			// Create board and blocks
+			Board board = new Board(width, height, exitRow);
+			for (int b = 0; b < numBlocks; b++) {
+				if (!board.addBlock(blocks[b])) {
+					br.close();
+					return null;
+				}
+			}
+			
 			br.close();
+			return board;
+		} catch (IOException e) {
 			return null;
 		}
-		
-		// Parse and validate information about the blocks
-		int i = 0;
-		Block[] blocks = new Block[numBlocks];
-		while ((line = br.readLine()) != null) {
-			if (validArgs(width, height, exitRow, line.split(":"))) {
-				blocks[i++] = new Block(ID, row, col, length, orientation);
-			} else {
-				br.close();
-				return null;
-			}
-		}
-		
-		// Create board and blocks
-		Board board = new Board(width, height, exitRow);
-		for (int b = 0; b < numBlocks; b++) {
-			if (!board.addBlock(blocks[b])) {
-				br.close();
-				return null;
-			}
-		}
-		
-		br.close();
-		return board;
 	}
 }

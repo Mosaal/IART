@@ -3,8 +3,6 @@ package com.iart.rushhour.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import com.iart.rushhour.game.Block;
@@ -89,17 +87,13 @@ public class TestGame {
 	/** Tests the loading of a level */
 	@Test
 	public void testLevelLoading() {
-		try { assertNotEquals(null, Utils.loadLevel(TEST_LEVEL)); }
-		catch (IOException e) { e.printStackTrace(); }
+		assertNotEquals(null, Utils.loadLevel(TEST_LEVEL));
 	}
 
 	/** Tests the BFS algorithm */
 	@Test
 	public void testBFS() {
-		Board board = null;
-		try { board = Utils.loadLevel(TEST_LEVEL); }
-		catch (IOException e) { e.printStackTrace(); }
-
+		Board board = Utils.loadLevel(TEST_LEVEL);
 		Board lastNode = Algorithms.BFS(board);
 		assertNotEquals(null, lastNode);
 	}
@@ -107,10 +101,7 @@ public class TestGame {
 	/** Tests the DFS algorithm */
 	@Test
 	public void testDFS() {
-		Board board = null;
-		try { board = Utils.loadLevel(TEST_LEVEL); }
-		catch (IOException e) { e.printStackTrace(); }
-
+		Board board = Utils.loadLevel(TEST_LEVEL);
 		Board lastNode = Algorithms.DFS(board);
 		assertNotEquals(null, lastNode);
 	}
@@ -118,9 +109,7 @@ public class TestGame {
 	/** Tests the A* algorithm */
 	@Test
 	public void testAStar() {
-		Board board = null;
-		try { board = Utils.loadLevel(TEST_LEVEL); }
-		catch (IOException e) { e.printStackTrace(); }
+		Board board = Utils.loadLevel(TEST_LEVEL);
 		
 		if (HEURISTIC > -1 && HEURISTIC < 3) {
 			Board lastNode = Algorithms.AStar(board, HEURISTIC);
