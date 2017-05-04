@@ -8,10 +8,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import com.iart.rushhour.logic.Utils;
 
 public class MainMenuState extends GameState {
 
@@ -20,6 +25,8 @@ public class MainMenuState extends GameState {
 	// Instance variables
 	private JButton startBtn;
 	private ImageIcon bgImage;
+	private JRadioButton aiBtn;
+	private JRadioButton userBtn;
 	private JComboBox<String> levelCbx;
 	
 	/**
@@ -28,54 +35,68 @@ public class MainMenuState extends GameState {
 	 */
 	protected MainMenuState(GameStateManager gsm) {
 		super(gsm);
+		setLayout(new GridBagLayout());
 		
 		gsm.getRoot().setResizable(false);
 		gsm.getRoot().setSize(new Dimension(400, 450));
 		
+		Font font = new Font("Monospaced", Font.PLAIN, 15);
 		bgImage = new ImageIcon("res/background.png");
 		
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
+		GridBagConstraints gbc = new GridBagConstraints();
 		
 		JLabel titleLbl = new JLabel("Rush Hour");
-		titleLbl.setForeground(new Color(255, 255, 255));
-		titleLbl.setFont(new Font("Monospaced", Font.PLAIN, 50));
+		titleLbl.setFont(new Font("Monospaced", Font.PLAIN, 40));
+		titleLbl.setForeground(Color.WHITE);
 		
-		GridBagConstraints gbc_titleLbl = new GridBagConstraints();
-		gbc_titleLbl.weighty = 0.6;
-		gbc_titleLbl.insets = new Insets(0, 0, 5, 0);
-		gbc_titleLbl.weightx = 1.0;
-		gbc_titleLbl.gridx = 0;
-		gbc_titleLbl.gridy = 0;
-		add(titleLbl, gbc_titleLbl);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 45, 0);
+		add(titleLbl, gbc);
 		
 		startBtn = new JButton("Start");
-		startBtn.setFocusPainted(false);
-		startBtn.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		startBtn.setFocusable(false);
+		startBtn.setFont(font);
 		
-		GridBagConstraints gbc_startBtn = new GridBagConstraints();
-		gbc_startBtn.weighty = 0.2;
-		gbc_startBtn.insets = new Insets(0, 0, 5, 0);
-		gbc_startBtn.weightx = 1.0;
-		gbc_startBtn.gridx = 0;
-		gbc_startBtn.gridy = 1;
-		add(startBtn, gbc_startBtn);
+		gbc.gridy = 1;
+		add(startBtn, gbc);
 		
-		levelCbx = new JComboBox<String>();
-		// levelCbx = new JComboBox<String>(Utils.searchLevels());
-		levelCbx.setSelectedIndex(0);
-		levelCbx.setFont(new Font("Monospaced", Font.PLAIN, 15));
+		levelCbx = new JComboBox<String>(Utils.searchLevels());
+		levelCbx.setSelectedIndex(gsm.level - 1);
+		levelCbx.setFocusable(false);
+		levelCbx.setFont(font);
 		
-		GridBagConstraints gbc_lvlComboBox = new GridBagConstraints();
-		gbc_lvlComboBox.weighty = 0.2;
-		gbc_lvlComboBox.weightx = 1.0;
-		gbc_lvlComboBox.gridx = 0;
-		gbc_lvlComboBox.gridy = 2;
-		add(levelCbx, gbc_lvlComboBox);
+		gbc.gridy = 2;
+		add(levelCbx, gbc);
+		
+		JLabel modeLbl = new JLabel("Mode:");
+		modeLbl.setForeground(Color.WHITE);
+		modeLbl.setFont(font);
+		
+		aiBtn = new JRadioButton("AI");
+		aiBtn.setForeground(Color.WHITE);
+		aiBtn.setFont(font);
+		
+		userBtn = new JRadioButton("User");
+		userBtn.setForeground(Color.WHITE);
+		userBtn.setFont(font);
+		
+		if (gsm.mode == 0) aiBtn.setSelected(true);
+		else userBtn.setSelected(true);
+		
+		ButtonGroup btnGroup = new ButtonGroup();
+		btnGroup.add(aiBtn);
+		btnGroup.add(userBtn);
+		
+		JPanel modePanel = new JPanel();
+		modePanel.setOpaque(false);
+		
+		modePanel.add(modeLbl);
+		modePanel.add(aiBtn);
+		modePanel.add(userBtn);
+		
+		gbc.gridy = 3;
+		add(modePanel, gbc);
 		
 		// Initialize input
 		initInput();
@@ -84,8 +105,11 @@ public class MainMenuState extends GameState {
 	@Override
 	public void initInput() {
 		startBtn.addActionListener(e -> {
-			if (e.getActionCommand().equals("Start"))
+			if (e.getActionCommand().equals("Start")) {
+				gsm.mode = (aiBtn.isSelected()) ? 0 : 1;
+				gsm.level = levelCbx.getSelectedIndex() + 1;
 				gsm.setState(GameStateManager.PLAY_GAME_STATE);
+			}
 		});
 	}
 	

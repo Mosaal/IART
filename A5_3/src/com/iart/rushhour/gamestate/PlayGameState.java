@@ -25,7 +25,7 @@ public class PlayGameState extends GameState {
 	
 	private JTable statsTable;
 	private DefaultTableModel tableModel;
-	private String[] columnNames = { "Algorithm", "Number of Moves", "Time in seconds" };
+	private String[] columnNames = { "Algorithm", "Number of Moves", "Time" };
 	
 	/**
 	 * Creates a PlayGameState instance
@@ -72,11 +72,11 @@ public class PlayGameState extends GameState {
 		tableModel.setColumnIdentifiers(columnNames);
 		statsTable.setModel(tableModel);
 		
-		tableModel.addRow(new String[] { "A* Distance", "0", "0.000" });
-		tableModel.addRow(new String[] { "A* Blocking", "0", "0.000" });
-		tableModel.addRow(new String[] { "A* Distance+Blocking", "0", "0.000" });
-		tableModel.addRow(new String[] { "BFS", "0", "0.000" });
-		tableModel.addRow(new String[] { "DFS", "0", "0.000" });
+		tableModel.addRow(new String[] { "BFS", "0", "0.000 s" });
+		tableModel.addRow(new String[] { "DFS", "0", "0.000 s" });
+		tableModel.addRow(new String[] { "A* Distance", "0", "0.000 s" });
+		tableModel.addRow(new String[] { "A* Blocking", "0", "0.000 s" });
+		tableModel.addRow(new String[] { "A* Distance+Blocking", "0", "0.000 s" });
 		
 		tabbedPanel.add("Board", mainPanel);
 		tabbedPanel.add("Stats", new JScrollPane(statsTable));

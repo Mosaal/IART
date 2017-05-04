@@ -152,6 +152,7 @@ public class Algorithms {
 		int h = 0;
 		Block block = board.getBlockByID(Block.MAIN_BLOCK_ID);
 		
+		// TODO: change this
 		// Check the chosen heuristic
 		switch (heuristic) {
 		case DISTANCE_HEURISTIC:

@@ -19,7 +19,11 @@ public class GameStateManager {
 	 * Creates a GameStateManager instance
 	 * @param root the application's root frame
 	 */
-	public GameStateManager(Application root) { this.root = root; }
+	public GameStateManager(Application root) {
+		mode = 0;
+		level = 1;
+		this.root = root;
+	}
 	
 	// Instance methods
 	/** Returns the state manager's root frame */

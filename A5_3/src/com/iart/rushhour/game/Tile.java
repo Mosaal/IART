@@ -1,4 +1,4 @@
-package com.iart.rushhour.gui;
+package com.iart.rushhour.game;
 
 public class Tile {
 
