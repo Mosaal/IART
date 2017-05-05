@@ -32,7 +32,7 @@ public class PlayGameState extends GameState {
 
 	private JTable statsTable;
 	private DefaultTableModel tableModel;
-	private String[] columnNames = { "Algorithm", "Number of Moves", "Time" };
+	private String[] columnNames = { "Algorithm", "Number of Moves", "Execution Time" };
 
 	private ArrayList<Move> movesList;
 	private final double BILLION = 1000000000.0;

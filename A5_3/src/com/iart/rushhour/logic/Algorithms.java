@@ -14,7 +14,7 @@ public class Algorithms {
 	public static final int DISTANCE_HEURISTIC = 0;
 	public static final int NUM_BLOCKING_HEURISTIC = 1;
 	public static final int DISTANCE_NUM_BLOCKING_HEURISTIC = 2;
-	
+
 	// Static methods
 	/**
 	 * Returns all the adjacent nodes of a given node
@@ -48,8 +48,7 @@ public class Algorithms {
 
 	/**
 	 * A Breadth First Search algorithm implementation<br>
-	 * Guarantees the minimum amount of moves to the exit<br>
-	 * {@link http://web.mit.edu/eranki/www/tutorials/search/}
+	 * Guarantees the minimum amount of moves to the exit
 	 * @param board the initial node
 	 */
 	public static Board BFS(Board board) {
@@ -87,8 +86,7 @@ public class Algorithms {
 
 	/**
 	 * A Depth First Search algorithm implementation<br>
-	 * Does not guarantee the minimum amount of moves to the exit<br>
-	 * {@link http://web.mit.edu/eranki/www/tutorials/search/}
+	 * Does not guarantee the minimum amount of moves to the exit
 	 * @param board the initial node
 	 */
 	public static Board DFS(Board board) {
@@ -125,24 +123,24 @@ public class Algorithms {
 
 		return null;
 	}
-	
+
 	/**
 	 * Returns the node with the lowest f value in the given list
 	 * @param open the list to be searched through
 	 */
 	private static Board lowestF(ArrayList<Board> open) {
 		Board temp = null;
-		
+
 		for (int i = 0; i < open.size(); i++) {
 			if (temp == null)
 				temp = open.get(i);
 			else if (open.get(i).getF() < temp.getF())
 				temp = open.get(i);
 		}
-		
+
 		return temp;
 	}
-	
+
 	/**
 	 * Returns the value of the chosen heuristic
 	 * @param board the current node
@@ -151,28 +149,20 @@ public class Algorithms {
 	private static int heuristic(Board board, int heuristic) {
 		int h = 0;
 		Block block = board.getBlockByID(Block.MAIN_BLOCK_ID);
-		
-		// TODO: change this
+
 		// Check the chosen heuristic
-		switch (heuristic) {
-		case DISTANCE_HEURISTIC:
+		if (heuristic == DISTANCE_HEURISTIC) {
 			// Count every cell different from the main block
-			for (int i = block.getCol(); i < board.getWidth(); i++) {
+			for (int i = block.getCol(); i < board.getWidth(); i++)
 				if (board.getGrid()[block.getRow()][i] != Block.MAIN_BLOCK_ID)
 					h++;
-			}
-			break;
-		case NUM_BLOCKING_HEURISTIC:
-			// Count every cell different from the main block
-			// and different from an empty cell
-			for (int i = block.getCol(); i < board.getWidth(); i++) {
+		} else if (heuristic == NUM_BLOCKING_HEURISTIC) {
+			// Count every cell different from the main block and different from an empty cell
+			for (int i = block.getCol(); i < board.getWidth(); i++)
 				if (board.getGrid()[block.getRow()][i] != 0 && board.getGrid()[block.getRow()][i] != Block.MAIN_BLOCK_ID)
 					h++;
-			}
-			break;
-		case DISTANCE_NUM_BLOCKING_HEURISTIC:
-			// Count every cell different from the main block
-			// and add one for every cell in the way
+		} else if (heuristic == DISTANCE_NUM_BLOCKING_HEURISTIC) {
+			// Count every cell different from the main block and add one for every cell in the way
 			for (int i = block.getCol(); i < board.getWidth(); i++) {
 				if (board.getGrid()[block.getRow()][i] != Block.MAIN_BLOCK_ID) {
 					if (board.getGrid()[block.getRow()][i] != 0)
@@ -180,55 +170,55 @@ public class Algorithms {
 					h++;
 				}
 			}
-			break;
 		}
-			
+
 		return h;
 	}
 
 	/**
 	 * An A* algorithm implementation<br>
+	 * Guarantees the minimum amount of moves to the exit<br>
 	 * The following are the admissible heuristics:<br>
 	 * - the distance of the main block to the exit<br>
 	 * - the number of blocks blocking the way to the exit<br>
-	 * - the distance of the main block to the exit plus the the number of blocks blocking the way to the exit<br>
-	 * {@link http://web.mit.edu/eranki/www/tutorials/search/}
+	 * - the distance of the main block to the exit plus the the number of blocks blocking the way to the exit
 	 * @param board the initial node
+	 * @param heuristic the chosen heuristic
 	 */
 	public static Board AStar(Board board, int heuristic) {
 		// Initialize open and closed lists
 		ArrayList<Board> open = new ArrayList<Board>();
 		ArrayList<Board> closed = new ArrayList<Board>();
-		
+
 		// Set the first node
 		board.setG(0);
 		board.setF(board.getG() + heuristic(board, heuristic));
-		
+
 		// Add it to the open list
 		open.add(board);
-		
+
 		// Loop the open list as long as it isn't empty
 		while (!open.isEmpty()) {
 			// Get the node with the lowest f value
 			Board lowF = lowestF(open);
-			
+
 			// Check if it is the goal
 			if (lowF.isGameOver())
 				return lowF;
-			
+
 			// Add it to the closed list and remove it from the open list
 			closed.add(lowF);
 			open.remove(lowF);
-			
+
 			// Get the adjacent nodes
 			ArrayList<Board> adj = getAdjacentNodes(lowF);
-			
+
 			// Check each adjacent node not on the closed list
 			for (int i = 0; i < adj.size(); i++) {
 				if (!closed.contains(adj.get(i))) {
 					// Set this node's f value
 					adj.get(i).setF(adj.get(i).getG() + heuristic(adj.get(i), heuristic));
-					
+
 					// Check if it is on the open list
 					if (!open.contains(adj.get(i))) {
 						// Add it if it isn't
@@ -236,7 +226,7 @@ public class Algorithms {
 					} else {
 						// Get the one on the open list
 						Board temp = open.get(open.indexOf(adj.get(i)));
-						
+
 						// Check which one has the lowest g value
 						if (adj.get(i).getG() < temp.getG()) {
 							temp.setG(adj.get(i).getG());
@@ -246,7 +236,7 @@ public class Algorithms {
 				}
 			}
 		}
-		
+
 		return null;
 	}
 }
