@@ -75,10 +75,12 @@ public class MainMenuState extends GameState {
 		
 		aiBtn = new JRadioButton("AI");
 		aiBtn.setForeground(Color.WHITE);
+		aiBtn.setOpaque(false);
 		aiBtn.setFont(font);
 		
 		userBtn = new JRadioButton("User");
 		userBtn.setForeground(Color.WHITE);
+		userBtn.setOpaque(false);
 		userBtn.setFont(font);
 		
 		if (gsm.mode == 0) aiBtn.setSelected(true);
