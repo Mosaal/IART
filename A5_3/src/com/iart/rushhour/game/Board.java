@@ -10,6 +10,8 @@ public class Board {
 
 	// Instance variables
 	private int f, g;
+	private int visitedNodes;
+	
 	private int[][] grid;
 	private final int width;
 	private final int height;
@@ -35,6 +37,7 @@ public class Board {
 	public Board(final int width, final int height, final int exitRow) {
 		move = null;
 		parent = null;
+		visitedNodes = 0;
 		
 		this.width = width;
 		this.height = height;
@@ -77,6 +80,9 @@ public class Board {
 	/** Returns the g value of this node */
 	public int getG() { return g; }
 	
+	/** Returns the number of visited nodes up to this node */
+	public int getVisitedNodes() { return visitedNodes; }
+	
 	/** Returns the move that reaches this node */
 	public Move getMove() { return move; }
 	
@@ -118,6 +124,12 @@ public class Board {
 	 * @param g the g value to be set
 	 */
 	public void setG(int g) { this.g = g; }
+	
+	/**
+	 * Sets the number of visited nodes up to this node
+	 * @param visitedNodes the number of visited nodes to be set
+	 */
+	public void setVisitedNodes(int visitedNodes) { this.visitedNodes = visitedNodes; }
 	
 	/**
 	 * Sets the move that reaches this node

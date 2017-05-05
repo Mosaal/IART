@@ -52,6 +52,9 @@ public class Algorithms {
 	 * @param board the initial node
 	 */
 	public static Board BFS(Board board) {
+		// Number of visited nodes
+		int visitedNodes = 0;
+
 		// Store all visited nodes
 		ArrayList<Board> visited = new ArrayList<Board>();
 		visited.add(board);
@@ -62,12 +65,17 @@ public class Algorithms {
 
 		// Loop the queue as long as it isn't empty
 		while (!queue.isEmpty()) {
+			// Increment number of visited nodes
+			visitedNodes++;
+
 			// Get the node at the front of the queue
 			Board front = queue.removeFirst();
 
 			// Check if the goal is achieved
-			if (front.isGameOver())
+			if (front.isGameOver()) {
+				front.setVisitedNodes(visitedNodes);
 				return front;
+			}
 
 			// Get adjacent nodes
 			ArrayList<Board> adj = getAdjacentNodes(front);
@@ -90,6 +98,9 @@ public class Algorithms {
 	 * @param board the initial node
 	 */
 	public static Board DFS(Board board) {
+		// Number of visited nodes
+		int visitedNodes = 0;
+
 		// Store all visited nodes
 		ArrayList<Board> visited = new ArrayList<Board>();
 		visited.add(board);
@@ -100,12 +111,17 @@ public class Algorithms {
 
 		// Loop the stack as long as it isn't empty
 		while (!stack.isEmpty()) {
+			// Increment number of visited nodes
+			visitedNodes++;
+
 			// Get the node at the top of the stack
 			Board top = stack.pop();
 
 			// Check if the goal is achieved
-			if (top.isGameOver())
+			if (top.isGameOver()) {
+				top.setVisitedNodes(visitedNodes);
 				return top;
+			}
 
 			// Get adjacent nodes
 			ArrayList<Board> adj = getAdjacentNodes(top);
@@ -186,6 +202,9 @@ public class Algorithms {
 	 * @param heuristic the chosen heuristic
 	 */
 	public static Board AStar(Board board, int heuristic) {
+		// Number of visited nodes
+		int visitedNodes = 0;
+
 		// Initialize open and closed lists
 		ArrayList<Board> open = new ArrayList<Board>();
 		ArrayList<Board> closed = new ArrayList<Board>();
@@ -199,12 +218,17 @@ public class Algorithms {
 
 		// Loop the open list as long as it isn't empty
 		while (!open.isEmpty()) {
+			// Increment number of visited nodes
+			visitedNodes++;
+
 			// Get the node with the lowest f value
 			Board lowF = lowestF(open);
 
 			// Check if it is the goal
-			if (lowF.isGameOver())
+			if (lowF.isGameOver()) {
+				lowF.setVisitedNodes(visitedNodes);
 				return lowF;
+			}
 
 			// Add it to the closed list and remove it from the open list
 			closed.add(lowF);

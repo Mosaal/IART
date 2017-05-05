@@ -32,7 +32,7 @@ public class PlayGameState extends GameState {
 
 	private JTable statsTable;
 	private DefaultTableModel tableModel;
-	private String[] columnNames = { "Algorithm", "Number of Moves", "Execution Time" };
+	private String[] columnNames = { "Algorithm", "Number of Explored States", "Execution Time" };
 
 	private ArrayList<Move> movesList;
 	private final double BILLION = 1000000000.0;
@@ -159,16 +159,16 @@ public class PlayGameState extends GameState {
 		// Get elapsed time
 		double elapsedTime = (double) end / BILLION;
 
-		// Process BFS
-		int moves = 0;
+		// Set data on the table
+		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 0, 1);
+		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 0, 2);
+
+		// Get moves from BFS
+		movesList = new ArrayList<Move>();
 		while (lastNode.getParent() != null) {
-			moves++;
+			movesList.add(lastNode.getMove());
 			lastNode = lastNode.getParent();
 		}
-
-		// Set data on the table
-		tableModel.setValueAt(Integer.toString(moves), 0, 1);
-		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 0, 2);
 
 		// Run DFS
 		start = System.nanoTime();
@@ -178,15 +178,8 @@ public class PlayGameState extends GameState {
 		// Get elapsed time
 		elapsedTime = (double) end / BILLION;
 
-		// Process BFS
-		moves = 0;
-		while (lastNode.getParent() != null) {
-			moves++;
-			lastNode = lastNode.getParent();
-		}
-
 		// Set data on the table
-		tableModel.setValueAt(Integer.toString(moves), 1, 1);
+		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 1, 1);
 		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 1, 2);
 
 		// Run A* Distance
@@ -197,15 +190,8 @@ public class PlayGameState extends GameState {
 		// Get elapsed time
 		elapsedTime = (double) end / BILLION;
 
-		// Process BFS
-		moves = 0;
-		while (lastNode.getParent() != null) {
-			moves++;
-			lastNode = lastNode.getParent();
-		}
-
 		// Set data on the table
-		tableModel.setValueAt(Integer.toString(moves), 2, 1);
+		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 2, 1);
 		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 2, 2);
 
 		// Run A* Blocking
@@ -216,15 +202,8 @@ public class PlayGameState extends GameState {
 		// Get elapsed time
 		elapsedTime = (double) end / BILLION;
 
-		// Process BFS
-		moves = 0;
-		while (lastNode.getParent() != null) {
-			moves++;
-			lastNode = lastNode.getParent();
-		}
-
 		// Set data on the table
-		tableModel.setValueAt(Integer.toString(moves), 3, 1);
+		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 3, 1);
 		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 3, 2);
 
 		// Run A* Distance+Blocking
@@ -235,15 +214,8 @@ public class PlayGameState extends GameState {
 		// Get elapsed time
 		elapsedTime = (double) end / BILLION;
 
-		// Process BFS
-		movesList = new ArrayList<Move>();
-		while (lastNode.getParent() != null) {
-			movesList.add(lastNode.getMove());
-			lastNode = lastNode.getParent();
-		}
-
 		// Set data on the table
-		tableModel.setValueAt(Integer.toString(movesList.size()), 4, 1);
+		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 4, 1);
 		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 4, 2);
 	}
 }
