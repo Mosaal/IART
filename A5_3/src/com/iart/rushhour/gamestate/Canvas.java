@@ -108,11 +108,17 @@ public class Canvas extends JPanel {
 		int dir = -1;
 		int blockRow = gsm.board.getBlockByID(lastClick).getRow();
 		int blockCol = gsm.board.getBlockByID(lastClick).getCol();
+		int length = gsm.board.getBlockByID(lastClick).getLength();
+		int orient = gsm.board.getBlockByID(lastClick).getOrientation();
 
-		if (blockRow == row)
-			dir = (col < blockCol) ? Board.LEFT : Board.RIGHT;
-		else if (blockCol == col)
-			dir = (row < blockRow) ? Board.UP : Board.DOWN;
+		if (blockRow == row && orient == 0) {
+			if(col == blockCol) dir = Board.LEFT;
+			else if(col > blockCol - 2 + length) dir = Board.RIGHT;
+		}
+		else if (blockCol == col && orient == 1) {
+			if(row == blockRow) dir = Board.UP;
+			else if(row > blockRow - 2 + length) dir = Board.DOWN;
+		}
 
 		return dir;
 	}
@@ -142,31 +148,31 @@ public class Canvas extends JPanel {
 					if (ret == null)
 						return;
 
-					if (ret[BLOCK_ID] == 0) {
-						if (waitingForClick) {
-							// Get direction of the move
-							int dir = calculateDirection(ret[ROW], ret[COL]);
-
-							// Check if it can be moved
-							if (dir != -1 && gsm.board.canBlockBeMoved(lastClick, dir)) {
-								// Update data
-								gsm.updateMovesLbl(++validMoves);
-								gsm.board.moveBlock(lastClick, dir);
-							}
-
-							// Set ready for next click
-							waitingForClick = false;
-
-							// Check if the game is over
-							if (gsm.board.isGameOver())
-								ignoreAllInput = true;
-						}
-					} else if (ret[0] != -1) {
+					if (ret[BLOCK_ID] != -1) {
 						if (!waitingForClick) {
 							// Save the last clicked block
 							lastClick = ret[BLOCK_ID];
-							waitingForClick = true;
+							if(ret[BLOCK_ID] != 0) { waitingForClick = true; }
 						}
+					}
+
+					if (waitingForClick) {
+						// Get direction of the move
+						int dir = calculateDirection(ret[ROW], ret[COL]);
+
+						// Check if it can be moved
+						if (dir != -1 && gsm.board.canBlockBeMoved(lastClick, dir)) {
+							// Update data
+							gsm.updateMovesLbl(++validMoves);
+							gsm.board.moveBlock(lastClick, dir);
+						}
+
+						// Set ready for next click
+						waitingForClick = false;
+
+						// Check if the game is over
+						if (gsm.board.isGameOver())
+							ignoreAllInput = true;
 					}
 
 					// Update screen
@@ -184,7 +190,7 @@ public class Canvas extends JPanel {
 			timer = null;
 		}
 	}
-	
+
 	/**
 	 * Display the moves by the reverse order given by the list
 	 * @param moves the list of moves to be displayed
@@ -194,7 +200,7 @@ public class Canvas extends JPanel {
 
 		for (int i = moves.size() - 1; i >= 0; i--) {
 			final int I = i;
-			
+
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
