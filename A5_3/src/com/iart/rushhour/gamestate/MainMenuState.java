@@ -38,10 +38,10 @@ public class MainMenuState extends GameState {
 		setLayout(new GridBagLayout());
 		
 		gsm.getRoot().setResizable(false);
-		gsm.getRoot().setSize(new Dimension(400, 450));
+		gsm.getRoot().setSize(new Dimension(400, 550));
 		
 		Font font = new Font("Monospaced", Font.PLAIN, 15);
-		bgImage = new ImageIcon("res/background.png");
+		bgImage = new ImageIcon("res/background.jpg");
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		

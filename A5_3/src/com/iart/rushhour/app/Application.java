@@ -23,7 +23,7 @@ public class Application extends JFrame {
 
 		// Set the frame's settings
 		pack();
-		setSize(400, 450);
+		setSize(400, 550);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setMinimumSize(new Dimension(getWidth(), getHeight()));
 

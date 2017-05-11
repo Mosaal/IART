@@ -34,6 +34,7 @@ public class PlayGameState extends GameState {
 	private DefaultTableModel tableModel;
 	private String[] columnNames = { "Algorithm", "Number of Explored States", "Execution Time" };
 
+	private JLabel doneLbl;
 	private ArrayList<Move> movesList;
 	private final double BILLION = 1000000000.0;
 
@@ -110,8 +111,22 @@ public class PlayGameState extends GameState {
 
 		// Add components
 		add(tabbedPanel, BorderLayout.CENTER);
-		if (gsm.mode == 0)
-			add(startBtn, BorderLayout.SOUTH);
+		if (gsm.mode == 0) {
+			JPanel southPanel = new JPanel();
+			southPanel.setLayout(new BorderLayout());
+			
+			startBtn.setEnabled(false);
+			southPanel.add(startBtn, BorderLayout.NORTH);
+			
+			doneLbl = new JLabel("Running algortihms...");
+			doneLbl.setFont(font);
+			doneLbl.setBorder(new EmptyBorder(10, 0, 10, 0));
+			doneLbl.setHorizontalAlignment(SwingConstants.CENTER);
+			
+			southPanel.add(doneLbl, BorderLayout.SOUTH);
+			
+			add(southPanel, BorderLayout.SOUTH);
+		}
 	}
 
 	// Instance methods
@@ -151,71 +166,80 @@ public class PlayGameState extends GameState {
 
 	/** Runs the search algorithms */
 	private void runAlgorithms() {
-		// Run BFS
-		long start = System.nanoTime();
-		Board lastNode = Algorithms.BFS(gsm.board);
-		long end = System.nanoTime() - start;
+		(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// Run BFS
+				long start = System.nanoTime();
+				Board lastNode = Algorithms.BFS(gsm.board);
+				long end = System.nanoTime() - start;
 
-		// Get elapsed time
-		double elapsedTime = (double) end / BILLION;
+				// Get elapsed time
+				double elapsedTime = (double) end / BILLION;
 
-		// Set data on the table
-		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 0, 1);
-		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 0, 2);
+				// Set data on the table
+				tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 0, 1);
+				tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 0, 2);
 
-		// Get moves from BFS
-		movesList = new ArrayList<Move>();
-		while (lastNode.getParent() != null) {
-			movesList.add(lastNode.getMove());
-			lastNode = lastNode.getParent();
-		}
+				// Get moves from BFS
+				movesList = new ArrayList<Move>();
+				while (lastNode.getParent() != null) {
+					movesList.add(lastNode.getMove());
+					lastNode = lastNode.getParent();
+				}
 
-		// Run DFS
-		start = System.nanoTime();
-		lastNode = Algorithms.DFS(gsm.board);
-		end = System.nanoTime() - start;
+				// Run DFS
+				start = System.nanoTime();
+				lastNode = Algorithms.DFS(gsm.board);
+				end = System.nanoTime() - start;
 
-		// Get elapsed time
-		elapsedTime = (double) end / BILLION;
+				// Get elapsed time
+				elapsedTime = (double) end / BILLION;
 
-		// Set data on the table
-		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 1, 1);
-		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 1, 2);
+				// Set data on the table
+				tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 1, 1);
+				tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 1, 2);
 
-		// Run A* Distance
-		start = System.nanoTime();
-		lastNode = Algorithms.AStar(gsm.board, Algorithms.DISTANCE_HEURISTIC);
-		end = System.nanoTime() - start;
+				// Run A* Distance
+				start = System.nanoTime();
+				lastNode = Algorithms.AStar(gsm.board, Algorithms.DISTANCE_HEURISTIC);
+				end = System.nanoTime() - start;
 
-		// Get elapsed time
-		elapsedTime = (double) end / BILLION;
+				// Get elapsed time
+				elapsedTime = (double) end / BILLION;
 
-		// Set data on the table
-		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 2, 1);
-		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 2, 2);
+				// Set data on the table
+				tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 2, 1);
+				tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 2, 2);
 
-		// Run A* Blocking
-		start = System.nanoTime();
-		lastNode = Algorithms.AStar(gsm.board, Algorithms.NUM_BLOCKING_HEURISTIC);
-		end = System.nanoTime() - start;
+				// Run A* Blocking
+				start = System.nanoTime();
+				lastNode = Algorithms.AStar(gsm.board, Algorithms.NUM_BLOCKING_HEURISTIC);
+				end = System.nanoTime() - start;
 
-		// Get elapsed time
-		elapsedTime = (double) end / BILLION;
+				// Get elapsed time
+				elapsedTime = (double) end / BILLION;
 
-		// Set data on the table
-		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 3, 1);
-		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 3, 2);
+				// Set data on the table
+				tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 3, 1);
+				tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 3, 2);
 
-		// Run A* Distance+Blocking
-		start = System.nanoTime();
-		lastNode = Algorithms.AStar(gsm.board, Algorithms.DISTANCE_NUM_BLOCKING_HEURISTIC);
-		end = System.nanoTime() - start;
+				// Run A* Distance+Blocking
+				start = System.nanoTime();
+				lastNode = Algorithms.AStar(gsm.board, Algorithms.DISTANCE_NUM_BLOCKING_HEURISTIC);
+				end = System.nanoTime() - start;
 
-		// Get elapsed time
-		elapsedTime = (double) end / BILLION;
+				// Get elapsed time
+				elapsedTime = (double) end / BILLION;
 
-		// Set data on the table
-		tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 4, 1);
-		tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 4, 2);
+				// Set data on the table
+				tableModel.setValueAt(Integer.toString(lastNode.getVisitedNodes()), 4, 1);
+				tableModel.setValueAt(String.format("%.3f", elapsedTime) + " s", 4, 2);
+				
+				// All done
+				doneLbl.setText("Done!");
+				startBtn.setEnabled(true);
+			}
+		})).start();
 	}
 }
