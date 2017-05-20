@@ -118,7 +118,7 @@ public class PlayGameState extends GameState {
 			startBtn.setEnabled(false);
 			southPanel.add(startBtn, BorderLayout.NORTH);
 			
-			doneLbl = new JLabel("Running algortihms...");
+			doneLbl = new JLabel("Running algorithms...");
 			doneLbl.setFont(font);
 			doneLbl.setBorder(new EmptyBorder(10, 0, 10, 0));
 			doneLbl.setHorizontalAlignment(SwingConstants.CENTER);
