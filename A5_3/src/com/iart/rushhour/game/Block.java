@@ -16,11 +16,11 @@ public class Block {
 
 	/**
 	 * Creates a Block instance
-	 * @param ID unique identifier of the block, ID > 0
-	 * @param row row of the block, row > 0 && row < length of the board
-	 * @param col column of the block, col > 0 && row < length of the board
-	 * @param length length of the block, length > 1
-	 * @param direction specifies whether the block is horizontal (0) or vertical (1)
+	 * @param ID the ID of the block
+	 * @param row the row of the block
+	 * @param col the column of the block
+	 * @param length the length of the block
+	 * @param orientation specifies whether the block is horizontal (0) or vertical (1)
 	 */
 	public Block(final int ID, final int row, final int col, final int length, final int orientation) {
 		this.ID = ID;
@@ -48,8 +48,8 @@ public class Block {
 
 	/**
 	 * Sets the new position of the block based on the top left corner
-	 * @param row row of the new position, row >= 0
-	 * @param col col of the new position, col >= 0
+	 * @param row row of the new position
+	 * @param col column of the new position
 	 */
 	public void setPosition(int row, int col) {
 		this.row = row;

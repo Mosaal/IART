@@ -8,7 +8,7 @@ public class Move {
 
 	/**
 	 * Creates a Move instance
-	 * @param blockID the unique identifier of the block that was moved
+	 * @param blockID the ID of the block that was moved
 	 * @param direction the direction the block was moved towards
 	 */
 	public Move(final int blockID, final int direction) {

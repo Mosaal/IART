@@ -35,8 +35,9 @@ public class Utils {
 	
 	/**
 	 * Checks whether the arguments of the text file are valid or not
-	 * @param width width of the board
-	 * @param height height of the board
+	 * @param width the width of the board
+	 * @param height the height of the board
+	 * @param exitRow the row of the exit
 	 * @param block string array with information about a block
 	 */
 	private static boolean validArgs(final int width, final int height, final int exitRow, final String[] block) {
@@ -71,7 +72,6 @@ public class Utils {
 	/**
 	 * Loads the specified level
 	 * @param level level to be loaded
-	 * @throws IOException
 	 */
 	public static Board loadLevel(final int level) {
 		try {

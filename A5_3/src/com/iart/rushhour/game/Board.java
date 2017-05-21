@@ -29,10 +29,9 @@ public class Board {
 
 	/**
 	 * Creates a Board instance
-	 * @param width width of the board, width >= 3
-	 * @param height height of the board, height >= 3
-	 * @param exitDir specifies the direction of the exit in regards to the board
-	 * @param exitRC specifies the row or column of the exit
+	 * @param width the width of the board
+	 * @param height the height of the board
+	 * @param exitRow the row of the exit
 	 */
 	public Board(final int width, final int height, final int exitRow) {
 		move = null;
@@ -133,7 +132,7 @@ public class Board {
 	
 	/**
 	 * Sets the move that reaches this node
-	 * @param parent the move to be set
+	 * @param move the move to be set
 	 */
 	public void setMove(Move move) { this.move = move; }
 	
@@ -206,7 +205,7 @@ public class Board {
 
 	/**
 	 * Checks if the specified block can be moved in a given direction
-	 * @param block block to be moved
+	 * @param blockID the ID of the block to be moved
 	 * @param direction direction the block is going to be moved to
 	 */
 	public boolean canBlockBeMoved(final int blockID, final int direction) {
@@ -235,7 +234,7 @@ public class Board {
 
 	/**
 	 * Moves the specified block in a given direction
-	 * @param block block to be moved
+	 * @param blockID the ID of the block to be moved
 	 * @param direction direction the block is going to be moved to
 	 */
 	public void moveBlock(final int blockID, final int direction) {

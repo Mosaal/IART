@@ -8,10 +8,10 @@ public class Tile {
 
 	/**
 	 * Creates a Tile instance
-	 * @param x the x coordinate of the Tile
-	 * @param y the y coordinate of the Tile
-	 * @param width the width of the Tile
-	 * @param height the height of the Tile
+	 * @param x the x coordinate of the tile
+	 * @param y the y coordinate of the tile
+	 * @param width the width of the tile
+	 * @param height the height of the tile
 	 */
 	public Tile(int x, int y, int width, int height) {
 		this.x = x;

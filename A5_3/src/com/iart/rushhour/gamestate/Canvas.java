@@ -47,7 +47,7 @@ public class Canvas extends JPanel {
 
 	/**
 	 * Creates a Canvas instance
-	 * @param pgs the canvas' parent state
+	 * @param gsm the game's state manager
 	 */
 	public Canvas(GameStateManager gsm) {
 		this.gsm = gsm;
