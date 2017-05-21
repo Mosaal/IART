@@ -17,6 +17,9 @@ public class Application extends JFrame {
 
 	/** Creates an Application instance */
 	public Application() {
+		// Set name
+		super("Rush Hour");
+		
 		// Initialize the game state manager
 		gsm = new GameStateManager(this);
 		gsm.setState(GameStateManager.MAIN_MENU_STATE);

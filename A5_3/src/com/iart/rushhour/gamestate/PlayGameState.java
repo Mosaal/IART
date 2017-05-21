@@ -139,8 +139,11 @@ public class PlayGameState extends GameState {
 	@Override
 	public void initInput() {
 		backBtn.addActionListener(e -> {
-			if (e.getActionCommand().equals("Back"))
+			if (e.getActionCommand().equals("Back")) {
+				canvas.stopTimer();
+				gsm.board = Utils.loadLevel(gsm.level);
 				gsm.setState(GameStateManager.MAIN_MENU_STATE);
+			}
 		});
 
 		resetBtn.addActionListener(e -> {

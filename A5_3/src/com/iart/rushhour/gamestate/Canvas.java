@@ -259,21 +259,5 @@ public class Canvas extends JPanel {
 						ARC_WIDTH, ARC_WIDTH);
 			}
 		}
-
-		// Paint the currently selected block
-		if (waitingForClick) {
-			Block block = gsm.board.getBlockByID(lastClick);
-
-			g.setColor(new Color(255, 255, 0));
-			if (block.getOrientation() == Block.HOR) {
-				g.drawRect((block.getCol() * xSize) + xSize,
-						(block.getRow() * ySize) + ySize,
-						xSize * block.getLength(), ySize);
-			} else {
-				g.drawRect((block.getCol() * xSize) + xSize,
-						(block.getRow() * ySize) + ySize,
-						xSize, ySize * block.getLength());
-			}
-		}
 	}
 }
